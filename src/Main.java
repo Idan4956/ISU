@@ -99,6 +99,11 @@ public class Main extends AbstractGame
 
     Font titleFont = new Font("Arial", Font.BOLD + Font.ITALIC, 40);
 
+    // List of clickable tiles (populated in LoadContent in draw order)
+    private final ArrayList<SpriteSheet> tiles = new ArrayList<>();
+    // Metadata objects for each tile (same order as 'tiles')
+    private final ArrayList<GameTile> gameTiles = new ArrayList<>();
+
 	public static void main(String[] args)
 	{
 		GameContainer gameContainer = new GameContainer(new Main(), gameName, windowWidth, windowHeight, fps);
@@ -107,8 +112,8 @@ public class Main extends AbstractGame
 
 
 	@Override
-	public void LoadContent(GameContainer gc)
-	{
+ public void LoadContent(GameContainer gc)
+ {
 		//TODO: This subprogram automatically happens only once, just before the actual game loop starts.
 		//It should never be manually called, the Engine will call it for you.
   //Load images, sounds and set up any data
@@ -178,12 +183,101 @@ public class Main extends AbstractGame
   playButton = new SpriteSheet(LoadImage.FromFile("images/sprites/PlayButton.png"));
   playButton.destRec = new Rectangle (windowWidth / 2 - playButton.GetFrameWidth() / 2, windowHeight / 2 - playButton.GetFrameHeight() / 2 + 120, playButton.GetFrameWidth(), playButton.GetFrameHeight());
 
+  // Build the clickable tiles list once all tiles are positioned
+  buildTileList();
+    }
 
-	}
+    // Returns the index (in draw order) of the tile under the mouse when the left mouse button is released.
+    // Returns -1 if the mouse wasn't released this frame or no tile is under the cursor.
+    private int getClickedTileIndexOnRelease()
+    {
+        if (!Input.IsMouseButtonReleased(Input.MOUSE_LEFT))
+        {
+            return -1;
+        }
+
+        Vector2F mousePos = Input.GetMousePos();
+        // Iterate from last to first so the top-most (last drawn) tile wins when overlapping
+        for (int i = tiles.size() - 1; i >= 0; i--)
+        {
+            SpriteSheet tile = tiles.get(i);
+            if (tile != null && tile.destRec != null && Helper.Intersects(tile.destRec, mousePos))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Convenience helper: returns the SpriteSheet tile that was clicked on release, or null if none.
+    private SpriteSheet getClickedTileOnRelease()
+    {
+        int idx = getClickedTileIndexOnRelease();
+        return (idx >= 0 && idx < tiles.size()) ? tiles.get(idx) : null;
+    }
+
+    // Convenience helper: returns the GameTile metadata for the clicked tile, or null if none.
+    private GameTile getClickedGameTileOnRelease()
+    {
+        int idx = getClickedTileIndexOnRelease();
+        return (idx >= 0 && idx < gameTiles.size()) ? gameTiles.get(idx) : null;
+    }
+
+    // Fills the 'tiles' list and creates a matching GameTile for each entry with a title.
+    private void buildTileList()
+    {
+        tiles.clear();
+        gameTiles.clear();
+        // Add only clickable world tiles: exclude background and UI (playButton)
+        // Order mirrors Draw() for GAMEPLAY
+        addTileWithMeta(desert,    "Desert");
+        addTileWithMeta(field,     "Field");
+        addTileWithMeta(oilField,  "Oil Field");
+        addTileWithMeta(forest,    "Forest");
+        addTileWithMeta(desert2,   "Desert 2");
+        addTileWithMeta(field2,    "Field 2");
+        addTileWithMeta(oilField2, "Oil Field 2");
+        addTileWithMeta(forest2,   "Forest 2");
+        addTileWithMeta(desert3,   "Desert 3");
+        addTileWithMeta(field3,    "Field 3");
+        addTileWithMeta(oilField3, "Oil Field 3");
+        addTileWithMeta(forest3,   "Forest 3");
+        addTileWithMeta(desert4,   "Desert 4");
+        addTileWithMeta(field4,    "Field 4");
+        addTileWithMeta(oilField4, "Oil Field 4");
+        addTileWithMeta(forest4,   "Forest 4");
+        addTileWithMeta(desert5,   "Desert 5");
+        addTileWithMeta(field5,    "Field 5");
+        addTileWithMeta(oilField5, "Oil Field 5");
+        addTileWithMeta(forest5,   "Forest 5");
+        addTileWithMeta(village,   "Village");
+        addTileWithMeta(village2,  "Village 2");
+        addTileWithMeta(village3,  "Village 3");
+        addTileWithMeta(village4,  "Village 4");
+        addTileWithMeta(village5,  "Village 5");
+        addTileWithMeta(mountains,  "Mountains");
+        addTileWithMeta(mountains2, "Mountains 2");
+        addTileWithMeta(mountains3, "Mountains 3");
+        addTileWithMeta(mountains4, "Mountains 4");
+        addTileWithMeta(mountains5, "Mountains 5");
+    }
+
+    // Helper: register a SpriteSheet tile and create a GameTile with a title in matching order
+    private void addTileWithMeta(SpriteSheet sheet, String title)
+    {
+        if (sheet != null)
+        {
+            tiles.add(sheet);
+            GameTile gt = new GameTile();
+            gt.setTitle(title);
+            gameTiles.add(gt);
+        }
+    }
 
 	@Override
 	public void Update(GameContainer gc, float deltaTime)
 	{
+        SpriteSheet activeTile = null;
 		//TODO: Add your update logic here, including user input, movement, physics, collision, ai, sound, etc.
         Vector2F mousePos = Input.GetMousePos();
         int points = 0;
@@ -215,6 +309,13 @@ public class Main extends AbstractGame
                 if (Input.IsKeyPressed(KeyEvent.VK_ESCAPE))
                 {
                     gameState = PAUSE;
+                }
+                activeTile = getClickedTileOnRelease();
+                GameTile clickedMeta = getClickedGameTileOnRelease();
+                if (clickedMeta != null)
+                {
+                    int idx = getClickedTileIndexOnRelease();
+                    System.out.println("Clicked tile: " + clickedMeta.getTitle() + (idx >= 0 ? " (index " + idx + ")" : ""));
                 }
 
                 player1Points = Integer.toString(points);

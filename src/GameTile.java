@@ -1,17 +1,19 @@
-import com.engine.core.gfx.Sprite;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.awt.Point;
-
+import com.engine.core.gfx.SpriteSheet;
 /**
  * Represents a single game tile with its visual and gameplay properties.
  */
 public class GameTile {
 
+    // Human-readable title/name of the tile
+    private String title;
+
     // Icon to show on the tile
-    private Sprite icon;
+    private SpriteSheet icon;
 
     // Point values for the two teams
     private int bluePoints;
@@ -29,7 +31,7 @@ public class GameTile {
     public GameTile() {
     }
 
-    public GameTile(Sprite icon, int bluePoints, int redPoints, List<String> resources, Color tileColor) {
+    public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Color tileColor) {
         this.icon = icon;
         this.bluePoints = bluePoints;
         this.redPoints = redPoints;
@@ -39,16 +41,24 @@ public class GameTile {
         this.tileColor = tileColor;
     }
 
-    public GameTile(Sprite icon, int bluePoints, int redPoints, List<String> resources, Color tileColor, Point location) {
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Color tileColor, Point location) {
         this(icon, bluePoints, redPoints, resources, tileColor);
         setLocation(location);
     }
 
-    public Sprite getIcon() {
+    public SpriteSheet getIcon() {
         return icon;
     }
 
-    public void setIcon(Sprite icon) {
+    public void setIcon(SpriteSheet icon) {
         this.icon = icon;
     }
 
