@@ -18,8 +18,6 @@ import com.engine.core.*;
 import com.engine.core.gfx.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Main extends AbstractGame
 {
@@ -27,10 +25,10 @@ public class Main extends AbstractGame
 	private static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 	private static int screenWidth = device.getDisplayMode().getWidth();
 	private static int screenHeight = device.getDisplayMode().getHeight();
-	
+
 	//Store how many milliseconds are in one second
 	private static final float SECOND = 1000f;
-	
+
 	//Game States - Add/Remove/Modify as needed
 	//These are the most common game states, but modify as needed
 	//You will ALSO need to modify the two switch statements in Update and Draw
@@ -39,17 +37,17 @@ public class Main extends AbstractGame
 	private static final int INSTRUCTIONS = 2;
 	private static final int GAMEPLAY = 3;
 	private static final int PAUSE = 4;
-	private static final int ENDGAME = 5;	
-	
+	private static final int ENDGAME = 5;
+
 	//Required Basic Game Visual data used in main below
 	private static String gameName = "Tile Democracy";
 	private static int windowWidth = 1920;	//For fullscreen mode set these next two to screenWidth and screenHeight
 	private static int windowHeight = 1080;
 	private static int fps = 60;
-	
+
 	//Store and set the initial game state, typically MENU to start
 	private int gameState = MENU;
-	
+
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Define your Global variables and constants here (They do NOT need to be static) //
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -99,9 +97,6 @@ public class Main extends AbstractGame
     SpriteSheet oilField5;
     SpriteSheet playButton;
 
-    // Auto-generated tile sprites (built in setup())
-    private final ArrayList<SpriteSheet> generatedTiles = new ArrayList<>();
-
     Font titleFont = new Font("Arial", Font.BOLD + Font.ITALIC, 40);
 
 	public static void main(String[] args)
@@ -112,8 +107,8 @@ public class Main extends AbstractGame
 
 
 	@Override
- public void LoadContent(GameContainer gc)
- {
+	public void LoadContent(GameContainer gc)
+	{
 		//TODO: This subprogram automatically happens only once, just before the actual game loop starts.
 		//It should never be manually called, the Engine will call it for you.
   //Load images, sounds and set up any data
@@ -184,82 +179,7 @@ public class Main extends AbstractGame
   playButton.destRec = new Rectangle (windowWidth / 2 - playButton.GetFrameWidth() / 2, windowHeight / 2 - playButton.GetFrameHeight() / 2 + 120, playButton.GetFrameWidth(), playButton.GetFrameHeight());
 
 
-        // Generate the procedural hex body of 30 tiles
-        setup();
-
-    }
-
-    /**
-     * Generates a set of 30 tiles arranged as a large hexagon body.
-     * Uses sprite images from res/images/sprites (all except PlayButton) and
-     * positions each tile using the hexagon sprite's dimensions for consistent sizing.
-     */
-    private void setup()
-    {
-        // Tile sprite paths (relative to resources root)
-        List<String> tilePaths = Arrays.asList(
-                "images/sprites/Desert.png",
-                "images/sprites/Field.png",
-                "images/sprites/Forest.png",
-                "images/sprites/Oil Field.png",
-                "images/sprites/hexagon.png",
-                "images/sprites/mountains.png",
-                "images/sprites/village.png"
-        );
-
-        // Load the hexagon sprite to define consistent tile width/height
-        SpriteSheet hex = new SpriteSheet(LoadImage.FromFile("images/sprites/hexagon.png"));
-        int hexW = hex.GetFrameWidth();
-        int hexH = hex.GetFrameHeight();
-
-        // Pattern for rows to reach 30 tiles total: 1,2,3,4,5,5,4,3,2,1
-        int[] rows = new int[]{1,2,3,4,5,5,4,3,2,1};
-
-        // Spacing for flat-top hexes (columns move mostly horizontally; rows are vertically staggered)
-        int stepX = (int)(hexW * 0.75);   // horizontal distance between adjacent hex centers
-        int stepY = (int)(hexH * 0.5);    // vertical distance between staggered rows
-
-        // Center of the big hex body on screen
-        int centerX = windowWidth / 2;
-        int centerY = windowHeight / 2;
-
-        generatedTiles.clear();
-
-        int spriteIndex = 0;
-        int totalRows = rows.length;
-        for (int r = 0; r < totalRows; r++)
-        {
-            int count = rows[r];
-            // Compute row y; rows are numbered from top to bottom
-            int rowOffsetFromCenter = r - (totalRows - 1) / 2; // negative above center, positive below
-            int rowY = centerY + rowOffsetFromCenter * stepY;
-
-            // Row width in pixels to center horizontally
-            int rowWidth = (count - 1) * stepX;
-            int startX = centerX - rowWidth / 2;
-
-            // Staggering: for a more hex-like shape, we nudge rows away from center slightly
-            // so that row lengths increase then decrease smoothly. This minor tweak enhances symmetry.
-            if (r < totalRows / 2) {
-                startX += (totalRows / 2 - r) * (stepX / 10);
-            } else if (r > totalRows / 2) {
-                startX += (r - totalRows / 2) * (stepX / 10);
-            }
-
-            for (int c = 0; c < count; c++)
-            {
-                String path = tilePaths.get(spriteIndex % tilePaths.size());
-                spriteIndex++;
-
-                SpriteSheet tile = new SpriteSheet(LoadImage.FromFile(path));
-                // Force all tile sprites to render at hexagon size for consistent tiling
-                int x = startX + c * stepX - hexW / 2;
-                int y = rowY - hexH / 2;
-                tile.destRec = new Rectangle(x, y, hexW, hexH);
-                generatedTiles.add(tile);
-            }
-        }
-    }
+	}
 
 	@Override
 	public void Update(GameContainer gc, float deltaTime)
@@ -332,11 +252,36 @@ public class Main extends AbstractGame
                 //Implement standard game logic (input, update game objects, apply physics,
                 //collision detection, update HUD elements, etc.)
                 Draw.Sprite(gfx, oceanBg);
-                // Draw generated hex body tiles
-                for (SpriteSheet t : generatedTiles) {
-                    Draw.Sprite(gfx, t);
-                }
-                // (Old individually placed sprites kept for reference but disabled in favor of generated tiles)
+                Draw.Sprite(gfx, desert);
+                Draw.Sprite(gfx, field);
+                Draw.Sprite(gfx, oilField);
+                Draw.Sprite(gfx, forest);
+                Draw.Sprite(gfx, desert2);
+                Draw.Sprite(gfx, field2);
+                Draw.Sprite(gfx, oilField2);
+                Draw.Sprite(gfx, forest2);
+                Draw.Sprite(gfx, desert3);
+                Draw.Sprite(gfx, field3);
+                Draw.Sprite(gfx, oilField3);
+                Draw.Sprite(gfx, forest3);
+                Draw.Sprite(gfx, desert4);
+                Draw.Sprite(gfx, field4);
+                Draw.Sprite(gfx, oilField4);
+                Draw.Sprite(gfx, forest4);
+                Draw.Sprite(gfx, desert5);
+                Draw.Sprite(gfx, field5);
+                Draw.Sprite(gfx, oilField5);
+                Draw.Sprite(gfx, forest5);
+                Draw.Sprite(gfx, village);
+                Draw.Sprite(gfx, village2);
+                Draw.Sprite(gfx, village3);
+                Draw.Sprite(gfx, village4);
+                Draw.Sprite(gfx, village5);
+                Draw.Sprite(gfx, mountains);
+                Draw.Sprite(gfx, mountains2);
+                Draw.Sprite(gfx, mountains3);
+                Draw.Sprite(gfx, mountains4);
+                Draw.Sprite(gfx, mountains5);
 
                 Draw.FillRect(gfx, 0, 0, windowWidth, 80, Helper.BLACK, 0.6F);
                 Draw.Text(gfx, "Points: ", 15, 45, titleFont, Helper.BLUE, 1f);
