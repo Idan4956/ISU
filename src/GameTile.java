@@ -4,28 +4,26 @@ import java.util.Collections;
 import java.util.List;
 import java.awt.Point;
 import com.engine.core.gfx.SpriteSheet;
-/**
- * Represents a single game tile with its visual and gameplay properties.
- */
+
 public class GameTile {
 
-    // Human-readable title/name of the tile
+
     private String title;
 
-    // Icon to show on the tile
+
     private SpriteSheet icon;
 
-    // Point values for the two teams
+
     private int bluePoints;
     private int redPoints;
 
     // Resources provided by this tile
     private final List<String> resources = new ArrayList<>();
 
-    // The color tint or identifying color of the tile
+    // The color tint
     private Color tileColor;
 
-    // The grid/world location of this tile (e.g., pixel or grid coordinates)
+    // The tile location
     private Point location;
 
     public GameTile() {

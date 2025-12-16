@@ -56,14 +56,18 @@ public class Main extends AbstractGame
     int [] xlevel = new int[] {480, 505, 630, 755, 880, 1005, 1130, 1255};
 
     int [] tileControled = new int[] {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
+
+    float fourtyFiveSec = 45000;
     //tiles are listed from left to right, top to bottom
 
     String player1Points = "0";
     String player2Points = "0";
 
-    Boolean player1turn = false;
+    Boolean player1turn = true;
     Boolean player2turn = false;
 
+    SpriteSheet player1Icon;
+    SpriteSheet player2Icon;
     SpriteSheet oceanBg;
 	SpriteSheet village;
 	SpriteSheet mountains;
@@ -98,11 +102,14 @@ public class Main extends AbstractGame
     SpriteSheet playButton;
 
     Font titleFont = new Font("Arial", Font.BOLD + Font.ITALIC, 40);
+    Vector2F mousePos = new Vector2F(0f,0f);
 
     // List of clickable tiles (populated in LoadContent in draw order)
     private final ArrayList<SpriteSheet> tiles = new ArrayList<>();
     // Metadata objects for each tile (same order as 'tiles')
     private final ArrayList<GameTile> gameTiles = new ArrayList<>();
+    // Persistently selected tile index (-1 when none selected)
+    private int selectedTileIndex = -1;
 
 	public static void main(String[] args)
 	{
@@ -182,13 +189,16 @@ public class Main extends AbstractGame
   forest5.destRec = new Rectangle (xlevel[2] - 11, 677, forest5.GetFrameWidth() * 2, forest5.GetFrameHeight() * 2);
   playButton = new SpriteSheet(LoadImage.FromFile("images/sprites/PlayButton.png"));
   playButton.destRec = new Rectangle (windowWidth / 2 - playButton.GetFrameWidth() / 2, windowHeight / 2 - playButton.GetFrameHeight() / 2 + 120, playButton.GetFrameWidth(), playButton.GetFrameHeight());
+  player1Icon = new SpriteSheet(LoadImage.FromFile("images/sprites/Player1icon.png"));
+  player1Icon.destRec = new Rectangle (0,0, player1Icon.GetFrameWidth()/3, player1Icon.GetFrameHeight()/3);
+  player2Icon = new SpriteSheet(LoadImage.FromFile("images/sprites/Player2icon.png"));
+  player2Icon.destRec = new Rectangle (windowWidth - player2Icon.GetFrameWidth() - 80, -8, (int)(player2Icon.GetFrameWidth() /2.5f), (int) (player2Icon.GetFrameHeight() /2.5f));
 
   // Build the clickable tiles list once all tiles are positioned
   buildTileList();
     }
 
     // Returns the index (in draw order) of the tile under the mouse when the left mouse button is released.
-    // Returns -1 if the mouse wasn't released this frame or no tile is under the cursor.
     private int getClickedTileIndexOnRelease()
     {
         if (!Input.IsMouseButtonReleased(Input.MOUSE_LEFT))
@@ -197,7 +207,7 @@ public class Main extends AbstractGame
         }
 
         Vector2F mousePos = Input.GetMousePos();
-        // Iterate from last to first so the top-most (last drawn) tile wins when overlapping
+
         for (int i = tiles.size() - 1; i >= 0; i--)
         {
             SpriteSheet tile = tiles.get(i);
@@ -209,27 +219,77 @@ public class Main extends AbstractGame
         return -1;
     }
 
-    // Convenience helper: returns the SpriteSheet tile that was clicked on release, or null if none.
+
     private SpriteSheet getClickedTileOnRelease()
     {
         int idx = getClickedTileIndexOnRelease();
         return (idx >= 0 && idx < tiles.size()) ? tiles.get(idx) : null;
     }
 
-    // Convenience helper: returns the GameTile metadata for the clicked tile, or null if none.
+
     private GameTile getClickedGameTileOnRelease()
     {
         int idx = getClickedTileIndexOnRelease();
         return (idx >= 0 && idx < gameTiles.size()) ? gameTiles.get(idx) : null;
     }
 
-    // Fills the 'tiles' list and creates a matching GameTile for each entry with a title.
+
+    // Returns the index (in draw order from back to front) of the tile currently under the mouse.
+    // Does NOT require any mouse button state.
+    private int getTileIndexUnderMouse()
+    {
+        Vector2F mouse = Input.GetMousePos();
+        for (int i = tiles.size() - 1; i >= 0; i--)
+        {
+            SpriteSheet tile = tiles.get(i);
+            if (tile != null && tile.destRec != null && Helper.Intersects(tile.destRec, mouse))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Returns the SpriteSheet of the tile currently under the mouse, or null if none.
+    private SpriteSheet getTileUnderMouse()
+    {
+        int idx = getTileIndexUnderMouse();
+        return (idx >= 0 && idx < tiles.size()) ? tiles.get(idx) : null;
+    }
+
+    // Returns the GameTile metadata of the tile currently under the mouse, or null if none.
+    private GameTile getGameTileUnderMouse()
+    {
+        int idx = getTileIndexUnderMouse();
+        return (idx >= 0 && idx < gameTiles.size()) ? gameTiles.get(idx) : null;
+    }
+
+    private SpriteSheet getSelectedTile()
+    {
+        return (selectedTileIndex >= 0 && selectedTileIndex < tiles.size()) ? tiles.get(selectedTileIndex) : null;
+    }
+
+    private GameTile getSelectedGameTile()
+    {
+        return (selectedTileIndex >= 0 && selectedTileIndex < gameTiles.size()) ? gameTiles.get(selectedTileIndex) : null;
+    }
+
+    private void drawTileInfoPanel(Graphics2D gfx, SpriteSheet tile, GameTile meta)
+    {
+        if (tile == null || tile.destRec == null) return;
+        Draw.FillRect(gfx, tile.destRec.x + 200, tile.destRec.y + 100, 220, 350, Helper.BLACK, 0.6f);
+        if (meta != null && meta.getTitle() != null)
+        {
+            Draw.Text(gfx, meta.getTitle(), tile.destRec.x + 210, tile.destRec.y + 140, titleFont, Helper.WHITE, 1f);
+        }
+    }
+
+
     private void buildTileList()
     {
         tiles.clear();
         gameTiles.clear();
-        // Add only clickable world tiles: exclude background and UI (playButton)
-        // Order mirrors Draw() for GAMEPLAY
+
         addTileWithMeta(desert,    "Desert");
         addTileWithMeta(field,     "Field");
         addTileWithMeta(oilField,  "Oil Field");
@@ -262,7 +322,7 @@ public class Main extends AbstractGame
         addTileWithMeta(mountains5, "Mountains 5");
     }
 
-    // Helper: register a SpriteSheet tile and create a GameTile with a title in matching order
+
     private void addTileWithMeta(SpriteSheet sheet, String title)
     {
         if (sheet != null)
@@ -305,34 +365,57 @@ public class Main extends AbstractGame
 			case GAMEPLAY:
 				//Implement standard game logic (input, update game objects, apply physics,
 				//collision detection, update HUD elements, etc.)
+                fourtyFiveSec -= deltaTime;
 
                 if (Input.IsKeyPressed(KeyEvent.VK_ESCAPE))
                 {
                     gameState = PAUSE;
                 }
-                activeTile = getClickedTileOnRelease();
-                GameTile clickedMeta = getClickedGameTileOnRelease();
-                if (clickedMeta != null)
+                // Selection logic: on mouse release, lock selection to tile under mouse; clicking water clears it
+                if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT))
                 {
-                    int idx = getClickedTileIndexOnRelease();
-                    System.out.println("Clicked tile: " + clickedMeta.getTitle() + (idx >= 0 ? " (index " + idx + ")" : ""));
+                    int idx = getTileIndexUnderMouse();
+                    selectedTileIndex = (idx >= 0) ? idx : -1;
+                    if (selectedTileIndex >= 0)
+                    {
+                        GameTile meta = gameTiles.get(selectedTileIndex);
+                        if (meta != null)
+                        {
+                            System.out.println("Selected tile: " + meta.getTitle() + " (index " + selectedTileIndex + ")");
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("Selection cleared");
+                    }
                 }
 
-                player1Points = Integer.toString(points);
-
+                    player1Points = Integer.toString(points);
+                if (player1turn == true && fourtyFiveSec <= 0)
+                {
+                    player1turn = false;
+                    player2turn = true;
+                    fourtyFiveSec = 45000;
+                }
+                else if (player2turn == true && fourtyFiveSec <= 0)
+                {
+                    player2turn = false;
+                    player1turn = true;
+                    fourtyFiveSec = 45000;
+                }
 
 				break;
 			case PAUSE:
 				//Get user input to unpause the game
 				break;
 			case ENDGAME:
-				//Wait for final input based on end of game options (end, restart, etc.) 
+				//Wait for final input based on end of game options (end, restart, etc.)
 				break;
 	    }
 	}
 
 	@Override
-	public void Draw(GameContainer gc, Graphics2D gfx) 
+	public void Draw(GameContainer gc, Graphics2D gfx)
 	{
 		//TODO: Add your draw logic here
 		//The only other logic here should be selection logic (everything else should be in Update)
@@ -351,7 +434,7 @@ public class Main extends AbstractGame
                 break;
             case GAMEPLAY:
                 //Implement standard game logic (input, update game objects, apply physics,
-                //collision detection, update HUD elements, etc.)
+                //collision detection, update HUD elements, etc.
                 Draw.Sprite(gfx, oceanBg);
                 Draw.Sprite(gfx, desert);
                 Draw.Sprite(gfx, field);
@@ -384,21 +467,67 @@ public class Main extends AbstractGame
                 Draw.Sprite(gfx, mountains4);
                 Draw.Sprite(gfx, mountains5);
 
+
                 Draw.FillRect(gfx, 0, 0, windowWidth, 80, Helper.BLACK, 0.6F);
-                Draw.Text(gfx, "Points: ", 15, 45, titleFont, Helper.BLUE, 1f);
-                Draw.Text(gfx, player1Points, 155, 45, titleFont, Helper.WHITE, 1f);
+                Draw.Text(gfx, "Points: ", 85, 45, titleFont, Helper.BLUE, 1f);
+                Draw.Text(gfx, player1Points, 225, 45, titleFont, Helper.WHITE, 1f);
                 Draw.Text(gfx, "Points: ", 1700, 45, titleFont, Helper.RED, 1f);
                 Draw.Text(gfx, player2Points, 1850, 45, titleFont, Helper.WHITE, 1f);
                 Draw.Text(gfx, "Turn: ", 900, 45, titleFont, Helper.WHITE, 1f);
-
                 if (player1turn == true)
                 {
-                    Draw.Text(gfx, "Player 1", 1020, 45, titleFont, Helper.BLUE, 1f);
+                    Draw.Text(gfx, String.format("%.2f", fourtyFiveSec / 1000), 1020, 45, titleFont, Helper.BLUE, 1f);
                 }
-                if (player2turn == true)
+                else if (player2turn == true)
                 {
-                    Draw.Text(gfx, "Player 2", 1020, 45, titleFont, Helper.RED, 1f);
+                    Draw.Text(gfx, String.format("%.2f", fourtyFiveSec / 1000), 1020, 45, titleFont, Helper.RED, 1f);
                 }
+
+                Draw.Sprite(gfx, player1Icon);
+                Draw.Sprite(gfx, player2Icon);
+
+
+
+                if (Helper.Intersects(player1Icon.destRec, Input.GetMousePos()))
+                {
+                    Draw.FillRect(gfx, 50, 100, 220, 350, Helper.BLACK, 1f);
+                    Draw.Text(gfx, "Iron: ", 60, 130, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Oil: ", 60, 190, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "People: ", 60, 240, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Food: ", 60, 300, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Glass: ", 60, 360, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Wood: ", 60, 420, titleFont, Helper.WHITE, 1f);
+                }
+                if (Helper.Intersects(player2Icon.destRec, Input.GetMousePos()))
+                {
+                    Draw.FillRect(gfx, 1610, 100, 220, 350, Helper.BLACK, 1f);
+                    Draw.Text(gfx, "Iron: ", 1620, 130, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Oil: ", 1620, 190, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "People: ", 1620, 240, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Food: ", 1620, 300, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Glass: ", 1620, 360, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, "Wood: ", 1620, 420, titleFont, Helper.WHITE, 1f);
+                }
+
+                SpriteSheet selectedTile = getSelectedTile();
+                GameTile selectedMeta = getSelectedGameTile();
+                if (selectedTile != null)
+                {
+                    drawTileInfoPanel(gfx, selectedTile, selectedMeta);
+                }
+                else
+                {
+                    // No selection yet — show a hover preview panel
+                    SpriteSheet hoveredTile = getTileUnderMouse();
+                    GameTile hoveredMeta = getGameTileUnderMouse();
+                    if (hoveredTile != null)
+                    {
+                        drawTileInfoPanel(gfx, hoveredTile, hoveredMeta);
+                    }
+                }
+
+        
+
 				break;
 			case PAUSE:
 				//Get user input to unpause the game
