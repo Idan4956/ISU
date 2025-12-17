@@ -5,11 +5,13 @@ import java.util.List;
 import java.awt.Point;
 import com.engine.core.gfx.SpriteSheet;
 
+
 public class GameTile {
 
 
     private String title;
 
+    private TileType tileType;
 
     private SpriteSheet icon;
 
@@ -45,6 +47,14 @@ public class GameTile {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public TileType getTileType() {
+        return tileType;
+    }
+
+    public void setTileType(TileType tileType) {
+        this.tileType = tileType;
     }
 
     public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Color tileColor, Point location) {

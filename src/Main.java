@@ -290,46 +290,47 @@ public class Main extends AbstractGame
         tiles.clear();
         gameTiles.clear();
 
-        addTileWithMeta(desert,    "Desert");
-        addTileWithMeta(field,     "Field");
-        addTileWithMeta(oilField,  "Oil Field");
-        addTileWithMeta(forest,    "Forest");
-        addTileWithMeta(desert2,   "Desert 2");
-        addTileWithMeta(field2,    "Field 2");
-        addTileWithMeta(oilField2, "Oil Field 2");
-        addTileWithMeta(forest2,   "Forest 2");
-        addTileWithMeta(desert3,   "Desert 3");
-        addTileWithMeta(field3,    "Field 3");
-        addTileWithMeta(oilField3, "Oil Field 3");
-        addTileWithMeta(forest3,   "Forest 3");
-        addTileWithMeta(desert4,   "Desert 4");
-        addTileWithMeta(field4,    "Field 4");
-        addTileWithMeta(oilField4, "Oil Field 4");
-        addTileWithMeta(forest4,   "Forest 4");
-        addTileWithMeta(desert5,   "Desert 5");
-        addTileWithMeta(field5,    "Field 5");
-        addTileWithMeta(oilField5, "Oil Field 5");
-        addTileWithMeta(forest5,   "Forest 5");
-        addTileWithMeta(village,   "Village");
-        addTileWithMeta(village2,  "Village 2");
-        addTileWithMeta(village3,  "Village 3");
-        addTileWithMeta(village4,  "Village 4");
-        addTileWithMeta(village5,  "Village 5");
-        addTileWithMeta(mountains,  "Mountains");
-        addTileWithMeta(mountains2, "Mountains 2");
-        addTileWithMeta(mountains3, "Mountains 3");
-        addTileWithMeta(mountains4, "Mountains 4");
-        addTileWithMeta(mountains5, "Mountains 5");
+        addTileWithMeta(desert,    "Desert",     TileType.Desert);
+        addTileWithMeta(field,     "Field",      TileType.Field);
+        addTileWithMeta(oilField,  "Oil Field",  TileType.OilField);
+        addTileWithMeta(forest,    "Forest",     TileType.Forest);
+        addTileWithMeta(desert2,   "Desert 2",   TileType.Desert);
+        addTileWithMeta(field2,    "Field 2",    TileType.Field);
+        addTileWithMeta(oilField2, "Oil Field 2",TileType.OilField);
+        addTileWithMeta(forest2,   "Forest 2",   TileType.Forest);
+        addTileWithMeta(desert3,   "Desert 3",   TileType.Desert);
+        addTileWithMeta(field3,    "Field 3",    TileType.Field);
+        addTileWithMeta(oilField3, "Oil Field 3",TileType.OilField);
+        addTileWithMeta(forest3,   "Forest 3",   TileType.Forest);
+        addTileWithMeta(desert4,   "Desert 4",   TileType.Desert);
+        addTileWithMeta(field4,    "Field 4",    TileType.Field);
+        addTileWithMeta(oilField4, "Oil Field 4",TileType.OilField);
+        addTileWithMeta(forest4,   "Forest 4",   TileType.Forest);
+        addTileWithMeta(desert5,   "Desert 5",   TileType.Desert);
+        addTileWithMeta(field5,    "Field 5",    TileType.Field);
+        addTileWithMeta(oilField5, "Oil Field 5",TileType.OilField);
+        addTileWithMeta(forest5,   "Forest 5",   TileType.Forest);
+        addTileWithMeta(village,   "Village",    TileType.Village);
+        addTileWithMeta(village2,  "Village 2",  TileType.Village);
+        addTileWithMeta(village3,  "Village 3",  TileType.Village);
+        addTileWithMeta(village4,  "Village 4",  TileType.Village);
+        addTileWithMeta(village5,  "Village 5",  TileType.Village);
+        addTileWithMeta(mountains,  "Mountains", TileType.Mountains);
+        addTileWithMeta(mountains2, "Mountains 2", TileType.Mountains);
+        addTileWithMeta(mountains3, "Mountains 3", TileType.Mountains);
+        addTileWithMeta(mountains4, "Mountains 4", TileType.Mountains);
+        addTileWithMeta(mountains5, "Mountains 5", TileType.Mountains);
     }
 
 
-    private void addTileWithMeta(SpriteSheet sheet, String title)
+    private void addTileWithMeta(SpriteSheet sheet, String title, TileType tileType)
     {
         if (sheet != null)
         {
             tiles.add(sheet);
             GameTile gt = new GameTile();
             gt.setTitle(title);
+            gt.setTileType(tileType);
             gameTiles.add(gt);
         }
     }
