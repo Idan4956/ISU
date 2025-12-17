@@ -100,6 +100,8 @@ public class Main extends AbstractGame
     SpriteSheet forest5;
     SpriteSheet oilField5;
     SpriteSheet playButton;
+    SpriteSheet lumberMillButton;
+    SpriteSheet pressedLumber;
 
     Font titleFont = new Font("Arial", Font.BOLD + Font.ITALIC, 40);
     Vector2F mousePos = new Vector2F(0f,0f);
@@ -127,6 +129,10 @@ public class Main extends AbstractGame
   // NOTE: Engine likely loads from classpath; with 'res' marked as resources root, use paths starting at 'images/...'
   oceanBg = new SpriteSheet(LoadImage.FromFile("images/backgrounds/OIP.png"));
   oceanBg.destRec = new Rectangle(0,0, windowWidth, windowHeight);
+  lumberMillButton = new SpriteSheet(LoadImage.FromFile("images/sprites/lumberMillButton.png"));
+  lumberMillButton.destRec = new Rectangle(0,0, (int) (lumberMillButton.GetFrameWidth() * 0.2f), (int) (lumberMillButton.GetFrameHeight() * 0.2f));
+  pressedLumber = new SpriteSheet(LoadImage.FromFile("images/sprites/pressedLumber.png"));
+  pressedLumber.destRec = new Rectangle(0,0, (int) (pressedLumber.GetFrameWidth() * 0.2f), (int) (pressedLumber.GetFrameHeight() * 0.2f));
   village = new SpriteSheet(LoadImage.FromFile("images/sprites/village.png"));
   village.destRec = new Rectangle(xlevel[4],ylevel[0], village.GetFrameWidth() * 2, village.GetFrameHeight() * 2);
   mountains = new SpriteSheet(LoadImage.FromFile("images/sprites/mountains.png"));
@@ -281,6 +287,14 @@ public class Main extends AbstractGame
         if (meta != null && meta.getTitle() != null)
         {
             Draw.Text(gfx, meta.getTitle(), tile.destRec.x + 210, tile.destRec.y + 140, titleFont, Helper.WHITE, 1f);
+        }
+        if (meta != null && meta.getAvailableBuilding() != null)
+        {
+            lumberMillButton.destRec.x = tile.destRec.x + 210;
+            lumberMillButton.destRec.y = tile.destRec.y + 120;
+            Draw.Sprite(gfx, lumberMillButton);
+            Draw.Sprite(gfx, pressedLumber);
+          
         }
     }
 

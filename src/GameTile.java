@@ -123,4 +123,25 @@ public class GameTile {
             this.location.setLocation(x, y);
         }
     }
+
+    public BuildingType getAvailableBuilding() {
+        switch (tileType)
+        {
+            case Desert:
+                return BuildingType.GlassFurnace;
+            case Field:
+                return BuildingType.Farm;
+            case OilField:
+                return BuildingType.OilDrill;
+            case Forest:
+                return BuildingType.LumberMill;
+            case Village:
+                return BuildingType.House;
+            case Mountains:
+                return BuildingType.Mine;
+            default:
+				return null;
+        }
+        
+    }
 }
