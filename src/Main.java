@@ -57,6 +57,7 @@ public class Main extends AbstractGame
 
     int [] tileControled = new int[] {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
 
+
     float fourtyFiveSec = 45000;
     float buttonPress = 0;
     //tiles are listed from left to right, top to bottom
@@ -107,6 +108,19 @@ public class Main extends AbstractGame
     SpriteSheet pressedMine;
     SpriteSheet farmButton;
     SpriteSheet pressedfarm;
+
+    int player1Iron = 0;
+    int player2Iron = 0;
+    int player1Wood = 0;
+    int player2Wood = 0;
+    int player1Glass = 0;
+    int player2Glass = 0;
+    int player1Food = 0;
+    int player2Food = 0;
+    int player1People = 0;
+    int player2People = 0;
+    int player1Oil = 0;
+    int player2Oil = 0;
 
     Font titleFont = new Font("Arial", Font.BOLD + Font.ITALIC, 40);
     Vector2F mousePos = new Vector2F(0f,0f);
@@ -590,21 +604,33 @@ public class Main extends AbstractGame
                 {
                     Draw.FillRect(gfx, 50, 100, 220, 350, Helper.BLACK, 1f);
                     Draw.Text(gfx, "Iron: ", 60, 130, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player1Iron), 160, 130, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Oil: ", 60, 190, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player1Oil), 140, 190, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "People: ", 60, 240, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player1People), 210, 240, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Food: ", 60, 300, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player1Food), 180, 300, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Glass: ", 60, 360, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player1Glass), 185, 360, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Wood: ", 60, 420, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player1Wood), 190, 420, titleFont, Helper.WHITE, 1f);
                 }
                 if (Helper.Intersects(player2Icon.destRec, Input.GetMousePos()))
                 {
                     Draw.FillRect(gfx, 1610, 100, 220, 350, Helper.BLACK, 1f);
                     Draw.Text(gfx, "Iron: ", 1620, 130, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player2Iron), 1720, 130, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Oil: ", 1620, 190, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player2Oil), 1700, 190, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "People: ", 1620, 240, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player2People), 1770, 240, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Food: ", 1620, 300, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player2Food), 1740, 300, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Glass: ", 1620, 360, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player2Glass), 1745, 360, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Wood: ", 1620, 420, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player2Wood), 1750, 420, titleFont, Helper.WHITE, 1f);
                 }
 
                 SpriteSheet selectedTile = getSelectedTile();
