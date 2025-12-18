@@ -58,6 +58,7 @@ public class Main extends AbstractGame
     int [] tileControled = new int[] {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
 
     float fourtyFiveSec = 45000;
+    float buttonPress = 0;
     //tiles are listed from left to right, top to bottom
 
     String player1Points = "0";
@@ -102,6 +103,10 @@ public class Main extends AbstractGame
     SpriteSheet playButton;
     SpriteSheet lumberMillButton;
     SpriteSheet pressedLumber;
+    SpriteSheet mineButton;
+    SpriteSheet pressedMine;
+    SpriteSheet farmButton;
+    SpriteSheet pressedfarm;
 
     Font titleFont = new Font("Arial", Font.BOLD + Font.ITALIC, 40);
     Vector2F mousePos = new Vector2F(0f,0f);
@@ -132,7 +137,15 @@ public class Main extends AbstractGame
   lumberMillButton = new SpriteSheet(LoadImage.FromFile("images/sprites/lumberMillButton.png"));
   lumberMillButton.destRec = new Rectangle(0,0, (int) (lumberMillButton.GetFrameWidth() * 0.2f), (int) (lumberMillButton.GetFrameHeight() * 0.2f));
   pressedLumber = new SpriteSheet(LoadImage.FromFile("images/sprites/pressedLumber.png"));
-  pressedLumber.destRec = new Rectangle(0,0, (int) (pressedLumber.GetFrameWidth() * 0.2f), (int) (pressedLumber.GetFrameHeight() * 0.2f));
+  pressedLumber.destRec = new Rectangle(0,0, (int) (pressedLumber.GetFrameWidth() * 0.08f), (int) (pressedLumber.GetFrameHeight() * 0.08f));
+  mineButton = new SpriteSheet(LoadImage.FromFile("images/sprites/MineButton.png"));
+  mineButton.destRec = new Rectangle(0,0, (int) (mineButton.GetFrameWidth() * 0.2f), (int) (mineButton.GetFrameHeight() * 0.2f));
+  pressedMine = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedMine.png"));
+  pressedMine.destRec = new Rectangle(0,0, (int) (pressedMine.GetFrameWidth() * 0.2f), (int) (pressedMine.GetFrameHeight() * 0.2f));
+  farmButton = new SpriteSheet(LoadImage.FromFile("images/sprites/FarmButton.png"));
+  farmButton.destRec = new Rectangle(0,0, (int) (farmButton.GetFrameWidth() * 0.2f), (int) (farmButton.GetFrameHeight() * 0.2f));
+  pressedfarm = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedFarm.png"));
+  pressedfarm.destRec = new Rectangle(0,0, (int) (pressedfarm.GetFrameWidth() * 0.2f), (int) (pressedfarm.GetFrameHeight() * 0.2f));
   village = new SpriteSheet(LoadImage.FromFile("images/sprites/village.png"));
   village.destRec = new Rectangle(xlevel[4],ylevel[0], village.GetFrameWidth() * 2, village.GetFrameHeight() * 2);
   mountains = new SpriteSheet(LoadImage.FromFile("images/sprites/mountains.png"));
@@ -280,6 +293,27 @@ public class Main extends AbstractGame
         return (selectedTileIndex >= 0 && selectedTileIndex < gameTiles.size()) ? gameTiles.get(selectedTileIndex) : null;
     }
 
+    // Returns the appropriate build button sprite based on building type and state
+    private SpriteSheet getBuildButton(BuildingType b, boolean pressed)
+    {
+        if (b == null) return null;
+        switch (b)
+        {
+            case LumberMill:
+                return pressed ? pressedLumber : lumberMillButton;
+            case Mine:
+                return pressed ? pressedMine : mineButton;
+            case Farm:
+                return pressed ? pressedfarm : farmButton;
+            // No dedicated button assets yet for these building types
+            case House:
+            case GlassFurnace:
+            case OilDrill:
+            default:
+                return null;
+        }
+    }
+
     private void drawTileInfoPanel(Graphics2D gfx, SpriteSheet tile, GameTile meta)
     {
         if (tile == null || tile.destRec == null) return;
@@ -288,13 +322,32 @@ public class Main extends AbstractGame
         {
             Draw.Text(gfx, meta.getTitle(), tile.destRec.x + 210, tile.destRec.y + 140, titleFont, Helper.WHITE, 1f);
         }
-        if (meta != null && meta.getAvailableBuilding() != null)
+        if (meta != null)
         {
-            lumberMillButton.destRec.x = tile.destRec.x + 210;
-            lumberMillButton.destRec.y = tile.destRec.y + 120;
-            Draw.Sprite(gfx, lumberMillButton);
-            Draw.Sprite(gfx, pressedLumber);
-          
+            BuildingType bt = meta.getAvailableBuilding();
+            SpriteSheet btn = getBuildButton(bt, false);
+            if (btn != null)
+            {
+                btn.destRec.x = tile.destRec.x + 210;
+                btn.destRec.y = tile.destRec.y + 140;
+                Draw.Sprite(gfx, btn);
+
+                if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(btn.destRec, Input.GetMousePos()))
+                {
+                    buttonPress = 1000;
+                }
+                if (buttonPress > 0f)
+                {
+                    buttonPress -= 16.666666666666f;
+                    SpriteSheet pressedBtn = getBuildButton(bt, true);
+                    if (pressedBtn != null)
+                    {
+                        pressedBtn.destRec.x = btn.destRec.x;
+                        pressedBtn.destRec.y = btn.destRec.y;
+                        Draw.Sprite(gfx, pressedBtn);
+                    }
+                }
+            }
         }
     }
 
@@ -386,22 +439,52 @@ public class Main extends AbstractGame
                 {
                     gameState = PAUSE;
                 }
-                // Selection logic: on mouse release, lock selection to tile under mouse; clicking water clears it
+                // Selection logic: on mouse release, update selection unless the click was on UI (panel or its button)
                 if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT))
                 {
-                    int idx = getTileIndexUnderMouse();
-                    selectedTileIndex = (idx >= 0) ? idx : -1;
-                    if (selectedTileIndex >= 0)
+                    boolean clickedUI = false;
+
+                    // If there is a selected tile, treat clicks on its info panel or button as UI clicks
+                    SpriteSheet st = getSelectedTile();
+                    if (st != null && st.destRec != null)
                     {
-                        GameTile meta = gameTiles.get(selectedTileIndex);
-                        if (meta != null)
+                        // Compute the panel rect exactly as drawn in drawTileInfoPanel
+                        Rectangle panelRect = new Rectangle(st.destRec.x + 200, st.destRec.y + 100, 220, 350);
+
+                        // Position the button for accurate hit testing (same as draw), using the correct type
+                        GameTile selectedMeta = getSelectedGameTile();
+                        BuildingType bt = (selectedMeta != null) ? selectedMeta.getAvailableBuilding() : null;
+                        SpriteSheet btn = getBuildButton(bt, false);
+                        if (btn != null)
                         {
-                            System.out.println("Selected tile: " + meta.getTitle() + " (index " + selectedTileIndex + ")");
+                            btn.destRec.x = st.destRec.x + 210;
+                            btn.destRec.y = st.destRec.y + 140;
+                        }
+
+                        Vector2F mouse = Input.GetMousePos();
+                        if (Helper.Intersects(panelRect, mouse) || (btn != null && Helper.Intersects(btn.destRec, mouse)))
+                        {
+                            // Consume the click so selection does not change and the panel stays open
+                            clickedUI = true;
                         }
                     }
-                    else
+
+                    if (!clickedUI)
                     {
-                        System.out.println("Selection cleared");
+                        int idx = getTileIndexUnderMouse();
+                        selectedTileIndex = (idx >= 0) ? idx : -1;
+                        if (selectedTileIndex >= 0)
+                        {
+                            GameTile meta = gameTiles.get(selectedTileIndex);
+                            if (meta != null)
+                            {
+                                System.out.println("Selected tile: " + meta.getTitle() + " (index " + selectedTileIndex + ")");
+                            }
+                        }
+                        else
+                        {
+                            System.out.println("Selection cleared");
+                        }
                     }
                 }
 
