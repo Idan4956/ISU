@@ -144,7 +144,7 @@ public class GameTile {
         }
     }
 
-    public buildBuilding() {
+    public void buildBuilding() {
         this.isBuildingExists = true;
     }
 }
