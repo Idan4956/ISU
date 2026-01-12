@@ -22,22 +22,18 @@ public class GameTile {
     // Resources provided by this tile
     private final List<String> resources = new ArrayList<>();
 
-    // The color tint
-    private Color tileColor;
-
     // The tile location
     private Point location;
 
     private boolean isBuildingExists;
 
-    public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Color tileColor) {
+    public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources) {
         this.icon = icon;
         this.bluePoints = bluePoints;
         this.redPoints = redPoints;
         if (resources != null) {
             this.resources.addAll(resources);
         }
-        this.tileColor = tileColor;
         this.isBuildingExists = false;
     }
 
@@ -57,8 +53,8 @@ public class GameTile {
         this.tileType = tileType;
     }
 
-    public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Color tileColor, Point location) {
-        this(icon, bluePoints, redPoints, resources, tileColor);
+    public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Point location) {
+        this(icon, bluePoints, redPoints, resources);
         setLocation(location);
     }
 
@@ -100,9 +96,6 @@ public class GameTile {
         return resources.remove(resource);
     }
 
-    public Color getTileColor() {
-        return tileColor;
-    }
 
     public void setTileColor(Color tileColor) {
         this.tileColor = tileColor;
