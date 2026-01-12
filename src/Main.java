@@ -445,7 +445,13 @@ public class Main extends AbstractGame {
             // Click handling
             if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(btn.destRec, Input.GetMousePos())) {
                 buttonPress = 1000;
-                BuildingCost(bt, player1turn ? player1Resources :  player2Resources);
+                int didBuildingSuccess = BuildingCost(bt, player1turn ? player1Resources :  player2Resources);
+                if (didBuildingSuccess == 1) {
+                    meta.buildBuilding();
+                } else {
+                    Draw.FillRect(gfx, windowWidth /2 - 100, windowHeight / 2 - 50, windowWidth /2 + 100, windowHeight / 2 + 50, Helper.BLACK, 1F);
+                    Draw.Text(gfx, "Not enough resources to build " + bt.toString(), windowWidth /2 -80 , windowHeight / 2, titleFont, Helper.WHITE, 1f);
+                }
             }
             if (buttonPress > 0f) {
                 buttonPress -= 16.666666666666f;

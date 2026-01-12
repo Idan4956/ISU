@@ -28,8 +28,7 @@ public class GameTile {
     // The tile location
     private Point location;
 
-    public GameTile() {
-    }
+    private boolean isBuildingExists;
 
     public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Color tileColor) {
         this.icon = icon;
@@ -39,6 +38,7 @@ public class GameTile {
             this.resources.addAll(resources);
         }
         this.tileColor = tileColor;
+        this.isBuildingExists = false;
     }
 
     public String getTitle() {
@@ -142,6 +142,9 @@ public class GameTile {
             default:
 				return null;
         }
-        
+    }
+
+    public buildBuilding() {
+        this.isBuildingExists = true;
     }
 }
