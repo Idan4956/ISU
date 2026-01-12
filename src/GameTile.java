@@ -134,6 +134,10 @@ public class GameTile {
         }
     }
 
+    public boolean isBuildingBuilt() {
+        return this.isBuildingExists;
+    }
+
     public void buildBuilding() {
         this.isBuildingExists = true;
     }

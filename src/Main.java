@@ -284,25 +284,35 @@ public class Main extends AbstractGame {
 
 
 
+    private boolean isPlayerHaveResourcesToBuild(BuildingType bt, PlayerResources playerResources) {
+        if (bt == BuildingType.GlassFurnace) {
+            return (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1)
+        }
+    }
+
     private int BuildingCost(BuildingType bt, PlayerResources playerResources )
     {
-    	
-        if (bt == BuildingType.GlassFurnace)
-        {
-            if (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1)
-            {
-                playerResources.setIron(playerResources.getIron() - 1);
-                playerResources.setPeople(playerResources.getPeople() - 1);
-                System.out.println("Build Glass Furnace");
-            }
-            else
-            {
-                return 0;
-            }
 
+        if (bt == BuildingType.GlassFurnace) {
+            return (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1)
         }
 
-		return 1;
+//        if (bt == BuildingType.GlassFurnace)
+//        {
+//            if (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1)
+//            {
+//                playerResources.setIron(playerResources.getIron() - 1);
+//                playerResources.setPeople(playerResources.getPeople() - 1);
+//                System.out.println("Build Glass Furnace");
+//            }
+//            else
+//            {
+//                return 0;
+//            }
+//
+//        }
+//
+//		return 1;
     }
 
     // Returns the SpriteSheet of the tile currently under the mouse, or null if none.
@@ -443,24 +453,34 @@ public class Main extends AbstractGame {
             Draw.Sprite(gfx, btn);
 
             // Click handling
+            boolean isBuildingAlreadyBuilt = meta.isBuildingBuilt();
+            PlayerResources activePlayerResources = player1turn ? player1Resources : player2Resources;
+            boolean isEnoughResourcesToBuild = isPlayerHaveResourcesToBuild(bt, activePlayerResources);
             if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(btn.destRec, Input.GetMousePos())) {
                 buttonPress = 1000;
-                int didBuildingSuccess = BuildingCost(bt, player1turn ? player1Resources :  player2Resources);
-                if (didBuildingSuccess == 1) {
-                    meta.buildBuilding();
-                } else {
-                    Draw.FillRect(gfx, windowWidth /2 - 100, windowHeight / 2 - 50, windowWidth /2 + 100, windowHeight / 2 + 50, Helper.BLACK, 1F);
-                    Draw.Text(gfx, "Not enough resources to build " + bt.toString(), windowWidth /2 -80 , windowHeight / 2, titleFont, Helper.WHITE, 1f);
+
+                if (!isBuildingAlreadyBuilt) {
+                    if (isEnoughResourcesToBuild) {
+                        meta.buildBuilding();
+                        isEnoughResourcesToBuild = activePlayerResources.useResourcesForBuilding(bt);
+                    }
                 }
             }
             if (buttonPress > 0f) {
                 buttonPress -= 16.666666666666f;
                 SpriteSheet pressedBtn = getBuildButton(bt, true);
-                //BuildingCost();
                 if (pressedBtn != null && pressedBtn.destRec != null) {
                     pressedBtn.destRec.x = btn.destRec.x;
                     pressedBtn.destRec.y = btn.destRec.y;
                     Draw.Sprite(gfx, pressedBtn);
+                }
+                if (isBuildingAlreadyBuilt) {
+                    Draw.FillRect(gfx, windowWidth / 2 - 100, windowHeight / 2 - 50, windowWidth / 2 + 100, windowHeight / 2 + 50, Helper.BLACK, 1F);
+                    Draw.Text(gfx, "Building already exists", windowWidth / 2 - 80, windowHeight / 2, titleFont, Helper.WHITE, 1f);
+                }
+                if (!isEnoughResourcesToBuild) {
+                    Draw.FillRect(gfx, windowWidth / 2 - 100, windowHeight / 2 - 50, windowWidth / 2 + 100, windowHeight / 2 + 50, Helper.BLACK, 1F);
+                    Draw.Text(gfx, "Not enough resources to build " + bt.toString(), windowWidth / 2 - 80, windowHeight / 2, titleFont, Helper.WHITE, 1f);
                 }
             }
         }

@@ -63,4 +63,17 @@ public class PlayerResources
     public void setWood(int wood) {
         Wood = wood;
     }
+
+    public boolean useResourcesForBuilding(BuildingType bt) {
+        if (bt == BuildingType.GlassFurnace) {
+            if (this.Iron <= 0 || this.People <= 0)
+            {
+                return false;
+            }
+            this.Iron = this.Iron - 1;
+            this.People = this.People - 1;
+
+            return true;
+        }
+    }
 }
