@@ -286,7 +286,8 @@ public class Main extends AbstractGame {
 
     private boolean isPlayerHaveResourcesToBuild(BuildingType bt, PlayerResources playerResources) {
         if (bt == BuildingType.GlassFurnace) {
-            return (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1);
+            boolean isEnoughResourcesToBuildGlassFurnace = playerResources.getIron() >= 1 && playerResources.getPeople() >= 1;
+            return isEnoughResourcesToBuildGlassFurnace;
         }
     }
 
