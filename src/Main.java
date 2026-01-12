@@ -702,7 +702,7 @@ public class Main extends AbstractGame {
                     Draw.Text(gfx, "Iron: ", 60, 130, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, Integer.toString(player1Resources.getIron()), 160, 130, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Oil: ", 60, 190, titleFont, Helper.WHITE, 1f);
-                    Draw.Text(gfx, Integer.toString(player1Resources.getOil()) 140, 190, titleFont, Helper.WHITE, 1f);
+                    Draw.Text(gfx, Integer.toString(player1Resources.getOil()), 140, 190, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "People: ", 60, 240, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, Integer.toString(player1Resources.getPeople()), 210, 240, titleFont, Helper.WHITE, 1f);
                     Draw.Text(gfx, "Food: ", 60, 300, titleFont, Helper.WHITE, 1f);
