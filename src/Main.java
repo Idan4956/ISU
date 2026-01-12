@@ -452,11 +452,11 @@ public class Main extends AbstractGame {
                     Draw.Sprite(gfx, pressedBtn);
                 }
                 if (isBuildingAlreadyBuilt) {
-                    Draw.FillRect(gfx, windowWidth / 2 - 100, windowHeight / 2 - 50, windowWidth / 2 + 100, windowHeight / 2 + 50, Helper.BLACK, 1F);
+                    Draw.FillRect(gfx, windowWidth / 2 - 100, windowHeight / 2 - 50, 200, 100, Helper.BLACK, 1F);
                     Draw.Text(gfx, "Building already exists", windowWidth / 2 - 80, windowHeight / 2, titleFont, Helper.WHITE, 1f);
                 }
                 if (!isEnoughResourcesToBuild) {
-                    Draw.FillRect(gfx, windowWidth / 2 - 100, windowHeight / 2 - 50, windowWidth / 2 + 100, windowHeight / 2 + 50, Helper.BLACK, 1F);
+                    Draw.FillRect(gfx, windowWidth / 2 - 100, windowHeight / 2 - 50, 200, 100, Helper.BLACK, 1F);
                     Draw.Text(gfx, "Not enough resources to build " + bt.toString(), windowWidth / 2 - 80, windowHeight / 2, titleFont, Helper.WHITE, 1f);
                 }
             }
