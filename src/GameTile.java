@@ -97,9 +97,6 @@ public class GameTile {
     }
 
 
-    public void setTileColor(Color tileColor) {
-        this.tileColor = tileColor;
-    }
 
     public Point getLocation() {
         return location == null ? null : new Point(location);

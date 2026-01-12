@@ -518,7 +518,7 @@ public class Main extends AbstractGame {
     private void addTileWithMeta(SpriteSheet sheet, String title, TileType tileType) {
         if (sheet != null) {
             tiles.add(sheet);
-            GameTile gt = new GameTile(sheet, title == "Hallstatt" ? 1 : 0, title == "Oia" ? 1 : 0 );
+            GameTile gt = new GameTile(sheet, title == "Hallstatt" ? 1 : 0, title == "Oia" ? 1 : 0, null );
             gt.setTitle(title);
             gt.setTileType(tileType);
             gameTiles.add(gt);
