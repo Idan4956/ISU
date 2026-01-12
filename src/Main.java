@@ -286,33 +286,8 @@ public class Main extends AbstractGame {
 
     private boolean isPlayerHaveResourcesToBuild(BuildingType bt, PlayerResources playerResources) {
         if (bt == BuildingType.GlassFurnace) {
-            return (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1)
+            return (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1);
         }
-    }
-
-    private int BuildingCost(BuildingType bt, PlayerResources playerResources )
-    {
-
-        if (bt == BuildingType.GlassFurnace) {
-            return (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1)
-        }
-
-//        if (bt == BuildingType.GlassFurnace)
-//        {
-//            if (playerResources.getIron() >= 1 && playerResources.getPeople() >= 1)
-//            {
-//                playerResources.setIron(playerResources.getIron() - 1);
-//                playerResources.setPeople(playerResources.getPeople() - 1);
-//                System.out.println("Build Glass Furnace");
-//            }
-//            else
-//            {
-//                return 0;
-//            }
-//
-//        }
-//
-//		return 1;
     }
 
     // Returns the SpriteSheet of the tile currently under the mouse, or null if none.
