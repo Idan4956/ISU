@@ -246,6 +246,10 @@ public class Main extends AbstractGame {
         buildTileList();
     }
 
+    private GameTile findGameTile(ArrayList<GameTile> gameTiles, String tileTitle) {
+        return gameTiles.stream().filter(item -> item.getTitle() == tileTitle).findFirst().orElse(null);
+    }
+
     private int getClickedTileIndexOnRelease() {
         if (!Input.IsMouseButtonReleased(Input.MOUSE_LEFT)) {
             return -1;
@@ -528,8 +532,8 @@ public class Main extends AbstractGame {
         // Villages
         addTileWithMeta(village, "Hallstatt", TileType.Village);
         addTileWithMeta(village2, "Giethoorn", TileType.Village);
-        addTileWithMeta(village3, "Shirakawa-go", TileType.Village);
-        addTileWithMeta(village4, "Oia", TileType.Village);
+        addTileWithMeta(village3, "Shirakawa-go", TileType.Village, 100, 0);
+        addTileWithMeta(village4, "Oia", TileType.Village, 0, 100);
         addTileWithMeta(village5, "Reine", TileType.Village);
 
         // Mountain ranges
@@ -541,13 +545,15 @@ public class Main extends AbstractGame {
     }
 
 
-    private void addTileWithMeta(SpriteSheet sheet, String title, TileType tileType) {
+    private void addTileWithMeta(SpriteSheet sheet, String title, TileType tileType, int redPoints = 50, int bluePoints = 50) {
         if (sheet != null) {
             tiles.add(sheet);
             GameTile gt = new GameTile(sheet, title == "Hallstatt" ? 1 : 0, title == "Oia" ? 1 : 0, null );
             gt.setTitle(title);
             gt.setTileType(tileType);
             gameTiles.add(gt);
+            gt.setRedPoints(redPoints);
+            gt.setBluePoints(bluePoints);
         }
     }
 
@@ -732,8 +738,12 @@ public class Main extends AbstractGame {
             case GAMEPLAY:
                 //Implement standard game logic (input, update game objects, apply physics,
                 //collision detection, update HUD elements, etc.
+
+                // background
                 Draw.Sprite(gfx, oceanBg);
-                Draw.Sprite(gfx, desert);
+
+                // tiles
+                Draw.Sprite(gfx, findGameTile(gameTiles, "Sahara Desert").getIcon());
                 Draw.Sprite(gfx, field);
                 Draw.Sprite(gfx, oilField);
                 Draw.Sprite(gfx, forest);
