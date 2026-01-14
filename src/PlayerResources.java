@@ -70,11 +70,77 @@ public class PlayerResources
             {
                 return false;
             }
-            this.Iron = this.Iron - 1;
-            this.People = this.People - 1;
+            else{
+                this.Iron -= 1;
+                this.People -= 1;
+
+                return true;
+            }
+        }
+        else if(bt == BuildingType.LumberMill){
+            if (this.Iron <= 0 || this.People <= 0)
+            {
+                return false;
+            }
+            else{
+                this.Iron -= 1;
+                this.People -= 1;
+
+                return true;
+            }
+        }
+        else if(bt == BuildingType.Mine)
+        {
+            if (this.Wood <= 0 || this.People <= 0)
+            {
+                return false;
+            }
+            else {
+            this.Wood -= 1;
+            this.People -= 1;
 
             return true;
         }
-        return false;
+        }
+        else if(bt == BuildingType.Farm)
+        {
+            if (this.People <= 0){
+                return false;
+            }
+        
+        else{
+            this.People -= 1;
+            return true;
+        }
+        }
+        else if(bt == BuildingType.OilDrill)
+        {
+            if (this.People <= 0 || this.Iron <= 0 ){
+                return false;
+            }
+        	else{
+        		this.People -= 1;
+        		this.Iron -= 1;
+        		return true;
+        	}
+       }
+        else if(bt == BuildingType.House)
+        {
+        	if (this.Food <= 0 || this.Iron <= 1 || this.Wood <= 1 || this.Glass <= 1)
+        	{
+        		return false;
+        	}
+        	else
+        	{
+        		this.Food -= 1;
+        		this.Iron -= 1;
+        		this.Wood -= 1;
+        		this.Glass -= 1;
+        		return true;
+        	}
+        }
+        else {
+        	return false;
+        }
     }
 }
