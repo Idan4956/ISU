@@ -141,4 +141,8 @@ public class GameTile {
     public void buildBuilding() {
         this.isBuildingExists = true;
     }
+
+    public void tint() {
+        Draw.Rect(gfx, this.icon.destRect.x, this.icon.destRect.y, this.icon.destRect.GetFrameWidth(), this.icon.GetFrameHeight(), 5, this.bluePoints == this.redPoints ? Helper.DARKGREY ? this.bluePoints > this.redPoints ? Helper.BLUE : Helper.RED);
+    }
 }

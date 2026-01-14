@@ -743,7 +743,10 @@ public class Main extends AbstractGame {
                 Draw.Sprite(gfx, oceanBg);
 
                 // tiles
-                Draw.Sprite(gfx, findGameTile(gameTiles, "Sahara Desert").getIcon());
+                SpriteSheet currentSprint = findGameTile(gameTiles, "Sahara Desert").getIcon();
+                Draw.Sprite(gfx, currentSprint);
+                currentSprint.tint();
+
                 Draw.Sprite(gfx, field);
                 Draw.Sprite(gfx, oilField);
                 Draw.Sprite(gfx, forest);
