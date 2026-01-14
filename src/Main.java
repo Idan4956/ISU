@@ -496,59 +496,75 @@ public class Main extends AbstractGame {
         }
     }
 
+    public void tint(GameTile tile, Graphics2D gfx) {
+    	Color color;
+    	if (tile.getRedPoints() == tile.getBluePoints())
+    	{
+    		color = Helper.GRAY;
+    	}
+    	else if (tile.getRedPoints() >= tile.getBluePoints())
+    	{
+    		color = Helper.RED;
+    	}
+    	else
+    	{
+    		color = Helper.BLUE;
+    	}
+        Draw.Rect(gfx, tile.getIcon().destRec.x + tile.getIcon().GetFrameWidth()/2, tile.getIcon().destRec.y + tile.getIcon().GetFrameHeight()/2, tile.getIcon().GetFrameWidth(), tile.getIcon().GetFrameHeight(), 5, color, 1f);
+    }
 
     private void buildTileList() {
         tiles.clear();
         gameTiles.clear();
 
         // Deserts
-        addTileWithMeta(desert, "Sahara Desert", TileType.Desert);
-        addTileWithMeta(desert2, "Gobi Desert", TileType.Desert);
-        addTileWithMeta(desert3, "Kalahari Desert", TileType.Desert);
-        addTileWithMeta(desert4, "Atacama Desert", TileType.Desert);
-        addTileWithMeta(desert5, "Arabian Desert", TileType.Desert);
+        addTileWithMeta(desert, "Sahara Desert", TileType.Desert, 50, 50);
+        addTileWithMeta(desert2, "Gobi Desert", TileType.Desert, 50, 50);
+        addTileWithMeta(desert3, "Kalahari Desert", TileType.Desert, 50, 50);
+        addTileWithMeta(desert4, "Atacama Desert", TileType.Desert, 50, 50);
+        addTileWithMeta(desert5, "Arabian Desert", TileType.Desert, 50, 50);
 
         // Fields
-        addTileWithMeta(field, "Great Plains", TileType.Field);
-        addTileWithMeta(field2, "Pampas", TileType.Field);
-        addTileWithMeta(field3, "Canterbury Plains", TileType.Field);
-        addTileWithMeta(field4, "North China Plain", TileType.Field);
-        addTileWithMeta(field5, "Black Earth Fields", TileType.Field);
+        addTileWithMeta(field, "Great Plains", TileType.Field, 50, 50);
+        addTileWithMeta(field2, "Pampas", TileType.Field, 50, 50);
+        addTileWithMeta(field3, "Canterbury Plains", TileType.Field, 50, 50);
+        addTileWithMeta(field4, "North China Plain", TileType.Field, 50, 50);
+        addTileWithMeta(field5, "Black Earth Fields", TileType.Field, 50, 50);
 
         // Oil fields
-        addTileWithMeta(oilField, "Ghawar Oil Field", TileType.OilField);
-        addTileWithMeta(oilField2, "Permian Basin", TileType.OilField);
-        addTileWithMeta(oilField3, "Burgan Oil Field", TileType.OilField);
-        addTileWithMeta(oilField4, "Kashagan Field", TileType.OilField);
-        addTileWithMeta(oilField5, "Brent Oilfield", TileType.OilField);
+        addTileWithMeta(oilField, "Ghawar Oil Field", TileType.OilField, 50, 50);
+        addTileWithMeta(oilField2, "Permian Basin", TileType.OilField, 50, 50);
+        addTileWithMeta(oilField3, "Burgan Oil Field", TileType.OilField, 50, 50);
+        addTileWithMeta(oilField4, "Kashagan Field", TileType.OilField, 50, 50);
+        addTileWithMeta(oilField5, "Brent Oilfield", TileType.OilField, 50, 50);
 
         // Forests
-        addTileWithMeta(forest, "Boreal Forest", TileType.Forest);
-        addTileWithMeta(forest2, "Amazon Rainforest", TileType.Forest);
-        addTileWithMeta(forest3, "Black Forest", TileType.Forest);
-        addTileWithMeta(forest4, "Sherwood Forest", TileType.Forest);
-        addTileWithMeta(forest5, "Daintree Rainforest", TileType.Forest);
+        addTileWithMeta(forest, "Boreal Forest", TileType.Forest, 50, 50);
+        addTileWithMeta(forest2, "Amazon Rainforest", TileType.Forest, 50, 50);
+        addTileWithMeta(forest3, "Black Forest", TileType.Forest, 50, 50);
+        addTileWithMeta(forest4, "Sherwood Forest", TileType.Forest, 50, 50);
+        addTileWithMeta(forest5, "Daintree Rainforest", TileType.Forest, 50, 50);
 
         // Villages
-        addTileWithMeta(village, "Hallstatt", TileType.Village);
-        addTileWithMeta(village2, "Giethoorn", TileType.Village);
+        addTileWithMeta(village, "Hallstatt", TileType.Village, 50, 50);
+        addTileWithMeta(village2, "Giethoorn", TileType.Village, 50, 50);
         addTileWithMeta(village3, "Shirakawa-go", TileType.Village, 100, 0);
         addTileWithMeta(village4, "Oia", TileType.Village, 0, 100);
-        addTileWithMeta(village5, "Reine", TileType.Village);
+        addTileWithMeta(village5, "Reine", TileType.Village, 50, 50);
 
         // Mountain ranges
-        addTileWithMeta(mountains, "Himalayas", TileType.Mountains);
-        addTileWithMeta(mountains2, "Andes", TileType.Mountains);
-        addTileWithMeta(mountains3, "Alps", TileType.Mountains);
-        addTileWithMeta(mountains4, "Rocky Mountains", TileType.Mountains);
-        addTileWithMeta(mountains5, "Ural Mountains", TileType.Mountains);
+        addTileWithMeta(mountains, "Himalayas", TileType.Mountains, 50, 50);
+        addTileWithMeta(mountains2, "Andes", TileType.Mountains, 50, 50);
+        addTileWithMeta(mountains3, "Alps", TileType.Mountains, 50, 50);
+        addTileWithMeta(mountains4, "Rocky Mountains", TileType.Mountains, 50, 50);
+        addTileWithMeta(mountains5, "Ural Mountains", TileType.Mountains, 50, 50);
     }
 
 
-    private void addTileWithMeta(SpriteSheet sheet, String title, TileType tileType, int redPoints = 50, int bluePoints = 50) {
+    private void addTileWithMeta(SpriteSheet sheet, String title, TileType tileType, int redPoints, int bluePoints) {
         if (sheet != null) {
             tiles.add(sheet);
-            GameTile gt = new GameTile(sheet, title == "Hallstatt" ? 1 : 0, title == "Oia" ? 1 : 0, null );
+            GameTile gt = new GameTile(sheet, title == "Hallstatt" ? 1 : 0, title == "Oia" ? 1 : 0, null);
             gt.setTitle(title);
             gt.setTileType(tileType);
             gameTiles.add(gt);
@@ -743,39 +759,131 @@ public class Main extends AbstractGame {
                 Draw.Sprite(gfx, oceanBg);
 
                 // tiles
-                SpriteSheet currentSprint = findGameTile(gameTiles, "Sahara Desert").getIcon();
-                Draw.Sprite(gfx, currentSprint);
-                currentSprint.tint();
+                GameTile currentTile;
+                currentTile = findGameTile(gameTiles, "Sahara Desert");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
 
-                Draw.Sprite(gfx, field);
-                Draw.Sprite(gfx, oilField);
-                Draw.Sprite(gfx, forest);
-                Draw.Sprite(gfx, desert2);
-                Draw.Sprite(gfx, field2);
-                Draw.Sprite(gfx, oilField2);
-                Draw.Sprite(gfx, forest2);
-                Draw.Sprite(gfx, desert3);
-                Draw.Sprite(gfx, field3);
-                Draw.Sprite(gfx, oilField3);
-                Draw.Sprite(gfx, forest3);
-                Draw.Sprite(gfx, desert4);
-                Draw.Sprite(gfx, field4);
-                Draw.Sprite(gfx, oilField4);
-                Draw.Sprite(gfx, forest4);
-                Draw.Sprite(gfx, desert5);
-                Draw.Sprite(gfx, field5);
-                Draw.Sprite(gfx, oilField5);
-                Draw.Sprite(gfx, forest5);
-                Draw.Sprite(gfx, village);
-                Draw.Sprite(gfx, village2);
-                Draw.Sprite(gfx, village3);
-                Draw.Sprite(gfx, village4);
-                Draw.Sprite(gfx, village5);
-                Draw.Sprite(gfx, mountains);
-                Draw.Sprite(gfx, mountains2);
-                Draw.Sprite(gfx, mountains3);
-                Draw.Sprite(gfx, mountains4);
-                Draw.Sprite(gfx, mountains5);
+                currentTile = findGameTile(gameTiles, "Great Plains");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Ghawar Oil Field");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Boreal Forest");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Gobi Desert");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Pampas");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Permian Basin");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Amazon Rainforest");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Kalahari Desert");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Canterbury Plains");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Burgan Oil Field");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Black Forest");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Atacama Desert");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Atacama Desert");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "North China Plain");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Kashagan Field");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Sherwood Forest");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Arabian Desert");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Black Earth Fields");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Brent Oilfield");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Daintree Rainforest");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Hallstatt");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Giethoorn");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Shirakawa-go");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Oia");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Reine");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Himalayas");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Andes");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Alps");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Rocky Mountains");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+
+                currentTile = findGameTile(gameTiles, "Ural Mountains");
+                Draw.Sprite(gfx, currentTile.getIcon());
+                tint(currentTile, gfx);
+                
                 //Draw.Sprite(gfx, blueDesert);
 
 

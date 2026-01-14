@@ -1,8 +1,12 @@
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.awt.Point;
+
+import com.engine.core.Helper;
+import com.engine.core.gfx.Draw;
 import com.engine.core.gfx.SpriteSheet;
 
 
@@ -14,7 +18,6 @@ public class GameTile {
     private TileType tileType;
 
     private SpriteSheet icon;
-
 
     private int bluePoints;
     private int redPoints;
@@ -51,11 +54,6 @@ public class GameTile {
 
     public void setTileType(TileType tileType) {
         this.tileType = tileType;
-    }
-
-    public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources, Point location) {
-        this(icon, bluePoints, redPoints, resources);
-        setLocation(location);
     }
 
     public SpriteSheet getIcon() {
@@ -142,7 +140,4 @@ public class GameTile {
         this.isBuildingExists = true;
     }
 
-    public void tint() {
-        Draw.Rect(gfx, this.icon.destRect.x, this.icon.destRect.y, this.icon.destRect.GetFrameWidth(), this.icon.GetFrameHeight(), 5, this.bluePoints == this.redPoints ? Helper.DARKGREY ? this.bluePoints > this.redPoints ? Helper.BLUE : Helper.RED);
-    }
 }
