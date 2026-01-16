@@ -319,22 +319,22 @@ public class Main extends AbstractGame {
 
     private String BuildingCostUI(BuildingType bt) {
         if (bt == BuildingType.GlassFurnace) {
-            return "Cost: 1 Iron, 1 Person, 1 Oil for upkeep every 3 turns";
+            return "Cost:, 1 Iron, 1 Person, 1 Oil for upkeep every 3 turns";
         }
         else if (bt == BuildingType.Farm) {
-            return "Cost: 1 person";
+            return "Cost:, 1 person";
         }
         else if (bt == BuildingType.LumberMill) {
-            return "Cost: 1 person, 1 Iron, 1 Oil for upkeep every 3 turns";
+            return "Cost:, 1 person, 1 Iron, 1 Oil for upkeep every 3 turns";
         }
         else if (bt == BuildingType.OilDrill) {
-            return "Cost 1 Iron, 1 Person, 1 Food for  upkeep every 3 turns";
+            return "Cost:, 1 Iron, 1 Person, 1 Food for  upkeep every 3 turns";
         }
         else if (bt == BuildingType.Mine) {
-            return "Cost: 1 Wood, 1 Person, 1 Food for upkeep every 3 turns";
+            return "Cost:, 1 Wood, 1 Person, 1 Food for upkeep every 3 turns";
         }
         else if (bt == BuildingType.House) {
-            return "Cost: 1 Food, 1 Iron, 1 Wood, 1 Glass";
+            return "Cost:, 1 Food, 1 Iron, 1 Wood, 1 Glass";
         } else {
             return "No info available";
         }
@@ -382,6 +382,7 @@ public class Main extends AbstractGame {
         if (tile == null || tile.destRec == null) return;
 
         Font smallTitleFont = titleFont.deriveFont((float) Math.max(12, (int)(titleFont.getSize() * 0.8f)));
+        Font costFont = titleFont.deriveFont((float) Math.max(12, (int)(titleFont.getSize() * 0.5f)));
 
         String title = (meta != null && meta.getTitle() != null) ? meta.getTitle() : "";
         java.awt.FontMetrics fm = gfx.getFontMetrics(smallTitleFont);
@@ -397,10 +398,9 @@ public class Main extends AbstractGame {
             btnH = Math.max(0, btn.destRec.height);
         }
 
-        Draw.Text(gfx, BuildingCostUI(bt), windowWidth/2, windowHeight/2, smallTitleFont, Helper.WHITE, 1f);
         int padX = 16;
         int padY = 12;
-        int minW = Math.max(220, btnW + padX * 2);
+        int minW = Math.max(350, btnW + padX * 2);
         int maxW = Math.max(minW, Math.min(520, windowWidth - 40));
 
        
@@ -437,7 +437,7 @@ public class Main extends AbstractGame {
         int spacing = (btn != null) ? 12 : 0;
         int titleBlockH = lines.size() * lineH;
         int contentH = titleBlockH + spacing + ((btn != null) ? btnH : 0);
-        int panelH = Math.max(80, contentH + padY * 2);
+        int panelH = Math.max(250, contentH + padY * 2);
 
         int baseX = tile.destRec.x + tile.destRec.width + 20;
 
@@ -448,7 +448,11 @@ public class Main extends AbstractGame {
 
 
         Draw.FillRect(gfx, panelX, panelY, panelW, panelH, Helper.BLACK, 0.6f);
-
+        String[] buildingCostParts = BuildingCostUI(bt).split(", ");
+        for (int i = 0; i < buildingCostParts.length; i++) {
+            String part = buildingCostParts[i];
+            Draw.Text(gfx, part, panelX + costFont.getSize(), panelY + 150 + i * (costFont.getSize() + 5), costFont, Helper.WHITE, 1f);
+        }
 
         int textX = panelX + padX;
         int textY = panelY + padY + textAscent;
