@@ -130,6 +130,9 @@ public class Main extends AbstractGame {
     private final ArrayList<GameTile> gameTiles = new ArrayList<>();
     private int selectedTileIndex = -1;
 
+    boolean isBuildingJustBuilt = false;
+
+
     public static void main(String[] args) {
         GameContainer gameContainer = new GameContainer(new Main(), gameName, windowWidth, windowHeight, fps);
         gameContainer.Start();
@@ -477,6 +480,7 @@ public class Main extends AbstractGame {
                 if (!isBuildingAlreadyBuilt) {
                     if (isEnoughResourcesToBuild) {
                         meta.buildBuilding();
+                        isBuildingJustBuilt = true;
                         isEnoughResourcesToBuild = activePlayerResources.useResourcesForBuilding(bt);
                     }
                 }
@@ -490,7 +494,7 @@ public class Main extends AbstractGame {
                         pressedBtn.destRec.y = btn.destRec.y;
                         Draw.Sprite(gfx, pressedBtn);
                     }
-                    if (isBuildingAlreadyBuilt) {
+                    if (isBuildingAlreadyBuilt && !isBuildingJustBuilt) {
                         Draw.FillRect(gfx, windowWidth / 2 - 250, windowHeight / 2 - 50, 500, 100, Helper.BLACK, 1F);
                         Draw.Text(gfx, "Building already exists", windowWidth / 2 - 230, windowHeight / 2, titleFont, Helper.WHITE, 1f);
                     }
@@ -499,6 +503,8 @@ public class Main extends AbstractGame {
                         Draw.Text(gfx, "Not enough resources to build " + bt.toString(), windowWidth / 2 - 430, windowHeight / 2, titleFont, Helper.WHITE, 1f);
                     }
                 }
+            } else if (buttonPress < 30f) {
+                isBuildingJustBuilt = false;
             }
         }
     }
