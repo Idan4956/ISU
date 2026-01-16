@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            // Eclipse often keeps non-code assets in "res"
+            srcDirs = ['res']
+        }
+    }
+}
+
+// Add everything in lib/ (all jars) AND any nested jars
+dependencies {
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+}
+
+// If you know your main class, set it here (optional but useful)
+// application {
+//     mainClass = 'com.yourpackage.Main'
+// }

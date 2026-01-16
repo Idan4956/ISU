@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="jfxrt">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jfxrt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/JavaGameEngine.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/JavaGameEngine.jar!/doc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/JavaGameEngine.jar!/" />
+    </SOURCES>
+  </library>
+</component>
