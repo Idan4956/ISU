@@ -101,6 +101,8 @@ public class Main extends AbstractGame {
     SpriteSheet forest5;
     SpriteSheet oilField5;
     SpriteSheet playButton;
+
+    // building buttons
     SpriteSheet lumberMillButton;
     SpriteSheet pressedLumber;
     SpriteSheet mineButton;
@@ -194,15 +196,15 @@ public class Main extends AbstractGame {
         forest2 = new SpriteSheet(LoadImage.FromFile("images/sprites/Forest.png"));
         forest2.destRec = new Rectangle(xlevel[5] + 5, 137, forest2.GetFrameWidth() * 2, forest2.GetFrameHeight() * 2);
         village3 = new SpriteSheet(LoadImage.FromFile("images/sprites/village.png"));
-        village3.destRec = new Rectangle(xlevel[7] + 22, 418, village2.GetFrameWidth() * 2, village2.GetFrameHeight() * 2);
+        village3.destRec = new Rectangle(xlevel[7] + 22, 418, village3.GetFrameWidth() * 2, village3.GetFrameHeight() * 2);
         mountains3 = new SpriteSheet(LoadImage.FromFile("images/sprites/mountains.png"));
-        mountains3.destRec = new Rectangle(xlevel[6] + 10, 652, mountains2.GetFrameWidth() * 2, mountains2.GetFrameHeight() * 2);
+        mountains3.destRec = new Rectangle(xlevel[6] + 10, 652, mountains3.GetFrameWidth() * 2, mountains3.GetFrameHeight() * 2);
         desert3 = new SpriteSheet(LoadImage.FromFile("images/sprites/Desert.png"));
-        desert3.destRec = new Rectangle(xlevel[7] + 20, 588, desert2.GetFrameWidth() * 2, desert2.GetFrameHeight() * 2);
+        desert3.destRec = new Rectangle(xlevel[7] + 20, 588, desert3.GetFrameWidth() * 2, desert3.GetFrameHeight() * 2);
         field3 = new SpriteSheet(LoadImage.FromFile("images/sprites/Field.png"));
-        field3.destRec = new Rectangle(xlevel[5] + 11, 756, field2.GetFrameWidth() * 2, field2.GetFrameHeight() * 2);
+        field3.destRec = new Rectangle(xlevel[5] + 11, 756, field3.GetFrameWidth() * 2, field3.GetFrameHeight() * 2);
         oilField3 = new SpriteSheet(LoadImage.FromFile("images/sprites/Oil Field.png"));
-        oilField3.destRec = new Rectangle(xlevel[6] + 13, 215, oilField2.GetFrameWidth() * 2, oilField2.GetFrameHeight() * 2);
+        oilField3.destRec = new Rectangle(xlevel[6] + 13, 215, oilField3.GetFrameWidth() * 2, oilField3.GetFrameHeight() * 2);
         forest3 = new SpriteSheet(LoadImage.FromFile("images/sprites/Forest.png"));
         forest3.destRec = new Rectangle(xlevel[7] + 19, 283, forest2.GetFrameWidth() * 2, forest2.GetFrameHeight() * 2);
         village4 = new SpriteSheet(LoadImage.FromFile("images/sprites/village.png"));
@@ -376,7 +378,7 @@ public class Main extends AbstractGame {
         }
     }
 
-    private void drawTileInfoPanel(Graphics2D gfx, SpriteSheet tile, GameTile meta) {
+    private void drawTileInfoPanel(Graphics2D gfx, SpriteSheet tile, GameTile meta, boolean isTileInfoPanelSelected) {
         if (tile == null || tile.destRec == null) return;
 
         Font smallTitleFont = titleFont.deriveFont((float) Math.max(12, (int)(titleFont.getSize() * 0.8f)));
@@ -439,8 +441,7 @@ public class Main extends AbstractGame {
 
         int baseX = tile.destRec.x + tile.destRec.width + 20;
 
-        boolean showAbove = (tile.destRec.y + tile.destRec.height / 2) > (windowHeight / 2);
-        int baseY = showAbove ? (tile.destRec.y - panelH - 20) : (tile.destRec.y + 20);
+        int baseY = tile.destRec.y + 20;
 
         int panelX = Math.max(10, Math.min(baseX, windowWidth - panelW - 10));
         int panelY = Math.max(10, Math.min(baseY, windowHeight - panelH - 10));
@@ -456,7 +457,7 @@ public class Main extends AbstractGame {
             Draw.Text(gfx, ln, textX, textY + (i * lineH), smallTitleFont, Helper.WHITE, 1f);
         }
 
-        if (btn != null) {
+        if (btn != null && isTileInfoPanelSelected) {
             int btnX = panelX + padX;
             int btnY = panelY + padY + titleBlockH + spacing;
             btn.destRec.x = btnX;
@@ -478,19 +479,21 @@ public class Main extends AbstractGame {
             }
             if (buttonPress > 0f) {
                 buttonPress -= 16.666666666666f;
-                SpriteSheet pressedBtn = getBuildButton(bt, true);
-                if (pressedBtn != null && pressedBtn.destRec != null) {
-                    pressedBtn.destRec.x = btn.destRec.x;
-                    pressedBtn.destRec.y = btn.destRec.y;
-                    Draw.Sprite(gfx, pressedBtn);
-                }
-                if (isBuildingAlreadyBuilt) {
-                    Draw.FillRect(gfx, windowWidth / 2 - 250, windowHeight / 2 - 50, 500, 100, Helper.BLACK, 1F);
-                    Draw.Text(gfx, "Building already exists", windowWidth / 2 - 230, windowHeight / 2, titleFont, Helper.WHITE, 1f);
-                }
-                if (!isEnoughResourcesToBuild) {
-                    Draw.FillRect(gfx, windowWidth / 2 - 450, windowHeight / 2 - 50, 900, 100, Helper.BLACK, 1F);
-                    Draw.Text(gfx, "Not enough resources to build " + bt.toString(), windowWidth / 2 - 430, windowHeight / 2, titleFont, Helper.WHITE, 1f);
+                if (isTileInfoPanelSelected) {
+                    SpriteSheet pressedBtn = getBuildButton(bt, true);
+                    if (pressedBtn != null && pressedBtn.destRec != null) {
+                        pressedBtn.destRec.x = btn.destRec.x;
+                        pressedBtn.destRec.y = btn.destRec.y;
+                        Draw.Sprite(gfx, pressedBtn);
+                    }
+                    if (isBuildingAlreadyBuilt) {
+                        Draw.FillRect(gfx, windowWidth / 2 - 250, windowHeight / 2 - 50, 500, 100, Helper.BLACK, 1F);
+                        Draw.Text(gfx, "Building already exists", windowWidth / 2 - 230, windowHeight / 2, titleFont, Helper.WHITE, 1f);
+                    }
+                    if (!isEnoughResourcesToBuild) {
+                        Draw.FillRect(gfx, windowWidth / 2 - 450, windowHeight / 2 - 50, 900, 100, Helper.BLACK, 1F);
+                        Draw.Text(gfx, "Not enough resources to build " + bt.toString(), windowWidth / 2 - 430, windowHeight / 2, titleFont, Helper.WHITE, 1f);
+                    }
                 }
             }
         }
@@ -937,12 +940,12 @@ public class Main extends AbstractGame {
                 SpriteSheet selectedTile = getSelectedTile();
                 GameTile selectedMeta = getSelectedGameTile();
                 if (selectedTile != null) {
-                    drawTileInfoPanel(gfx, selectedTile, selectedMeta);
+                    drawTileInfoPanel(gfx, selectedTile, selectedMeta, true);
                 } else {
                     SpriteSheet hoveredTile = getTileUnderMouse();
                     GameTile hoveredMeta = getGameTileUnderMouse();
                     if (hoveredTile != null) {
-                        drawTileInfoPanel(gfx, hoveredTile, hoveredMeta);
+                        drawTileInfoPanel(gfx, hoveredTile, hoveredMeta, false);
                     }
                 }
 
