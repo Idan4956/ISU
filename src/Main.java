@@ -618,7 +618,6 @@ public class Main extends AbstractGame {
         if (fourtyFiveSec <= 0) {
             fourtyFiveSec = turnTimer;
             selectedTileIndex = -1;
-            updatePlayerResources();
             if (player1turn) {
                 player1turn = false;
                 player2turn = true;
@@ -626,6 +625,7 @@ public class Main extends AbstractGame {
                 player2turn = false;
                 player1turn = true;
             }
+            updatePlayerResources();
         }
     }
 
@@ -648,19 +648,13 @@ public class Main extends AbstractGame {
 
     // Updating player resources based on tile control and buildings
     private void updatePlayerResources() {
-        int player1Count = 0;
-        int player2Count = 0;
-
         for (GameTile tile : gameTiles) {
-            if (player1turn) {
-                if (tile.getBluePoints() > 50) {
-                    player1Resources.assignResources(tile.getResources());
-                }
+            if (player1turn && tile.getBluePoints() > 50) {
+                player1Resources.assignResources(tile.getResources());
+            }else if (player2turn && tile.getRedPoints() > 50) {
+                player2Resources.assignResources(tile.getResources());
             }
         }
-
-        player1Points = Integer.toString(player1Count);
-        player2Points = Integer.toString(player2Count);
     }
 
     @Override
