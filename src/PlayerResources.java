@@ -147,4 +147,35 @@ public class PlayerResources
         	return false;
         }
     }
+
+    public void assignResources(String resource)
+    {
+        String tileResources = resource.substring(0, resource.indexOf(", "));
+        int amount = Integer.parseInt(resource.substring(resource.indexOf(", ") + 2));
+
+        if (tileResources == "People")
+        {
+            this.People += amount;
+        }
+        else if (tileResources == "Food")
+        {
+            this.Food += amount;
+        }
+        else if (tileResources == "Wood")
+        {
+            this.Wood += amount;
+        }
+        else if (tileResources == "Glass")
+        {
+            this.Glass += amount;
+        }
+        else if (tileResources == "Iron")
+        {
+            this.Iron += amount;
+        }
+        else if (tileResources == "Oil")
+        {
+            this.Oil += amount;
+        }
+    }
 }

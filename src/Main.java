@@ -619,7 +619,7 @@ public class Main extends AbstractGame {
         if (fourtyFiveSec <= 0) {
             fourtyFiveSec = 45000;
             selectedTileIndex = -1;
-            //hoveredTile = null;
+            updatePlayerResources();
             if (player1turn) {
                 player1turn = false;
                 player2turn = true;
@@ -647,6 +647,23 @@ public class Main extends AbstractGame {
         player2Points = Integer.toString(player2Count);
     }
 
+    // Updating player resources based on tile control and buildings
+    private void updatePlayerResources() {
+        int player1Count = 0;
+        int player2Count = 0;
+
+        for (GameTile tile : gameTiles) {
+            if (player1turn) {
+                if (tile.getBluePoints() > 50) {
+                    player1Resources.assignResources(tile.getResources());
+                }
+            }
+        }
+
+        player1Points = Integer.toString(player1Count);
+        player2Points = Integer.toString(player2Count);
+    }
+
     @Override
     public void Update(GameContainer gc, float deltaTime) {
         SpriteSheet activeTile = null;
@@ -654,7 +671,7 @@ public class Main extends AbstractGame {
         int points = 0;
         switch (gameState) {
             case MENU:
-                fourtyFiveSec = 45000;
+                fourtyFiveSec = 15000;
                 //begin game
                 if (Helper.Intersects(playButton.destRec, mousePos)) {
                     if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT)) {

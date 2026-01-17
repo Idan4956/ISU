@@ -82,8 +82,31 @@ public class GameTile {
         this.redPoints = redPoints;
     }
 
-    public List<String> getResources() {
-        return Collections.unmodifiableList(resources);
+    //Check which resource belongs to tile and how many should the player receive based on build status
+    public String getResources() {
+        String resource = "";
+        int howMany = 0;
+
+        if (tileType == TileType.Village) {
+            resource = "People";
+            howMany += 1;
+        } else if (tileType == TileType.Mountains) {
+            resource = "Iron";
+        } else if (tileType == TileType.Forest) {
+            resource = "Wood";
+        } else if (tileType == TileType.OilField) {
+            resource = "Oil";
+        } else if (tileType == TileType.Field) {
+            resource = "Food";
+        } else if (tileType == TileType.Desert) {
+            resource = "Glass";
+        }
+
+        if (this.isBuildingExists) {
+            howMany += 1;
+        }
+
+        return resource + ", " + Integer.toString(howMany);
     }
 
     //add resource by tile
