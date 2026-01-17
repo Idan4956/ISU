@@ -30,6 +30,7 @@ public class GameTile {
 
     private boolean isBuildingExists;
 
+    //information for tile logic
     public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources) {
         this.icon = icon;
         this.bluePoints = bluePoints;
@@ -39,6 +40,7 @@ public class GameTile {
         }
         this.isBuildingExists = false;
     }
+//getters and setters
 
     public String getTitle() {
         return title;
@@ -84,18 +86,22 @@ public class GameTile {
         return Collections.unmodifiableList(resources);
     }
 
+    //add resource by tile
     public void addResource(String resource) {
         if (resource != null && !resource.isEmpty()) {
             resources.add(resource);
         }
+
     }
 
+    //remove resources for the every 3 turns
     public boolean removeResource(String resource) {
         return resources.remove(resource);
     }
 
 
 
+    //getter and setter for location
     public Point getLocation() {
         return location == null ? null : new Point(location);
     }
@@ -112,6 +118,7 @@ public class GameTile {
         }
     }
 
+    //find the available buildings to be constructed by the tiletype
     public BuildingType getAvailableBuilding() {
         switch (tileType)
         {
@@ -132,10 +139,12 @@ public class GameTile {
         }
     }
 
+    //to check if there is already a building on the tile
     public boolean isBuildingBuilt() {
         return this.isBuildingExists;
     }
 
+    //build the building
     public void buildBuilding() {
         this.isBuildingExists = true;
     }

@@ -1,5 +1,6 @@
 public class PlayerResources
 {
+    //integers for each type of resource
     private int Wood;
     private int Glass;
     private int Iron;
@@ -7,6 +8,7 @@ public class PlayerResources
     private int People;
     private int Food;
 
+    //initial player resources
     public PlayerResources() {
         Wood = 3;
         Glass = 3;
@@ -16,6 +18,7 @@ public class PlayerResources
         Food = 3;
     }
 
+    //getters and setters for resources
     public int getGlass() {
         return Glass;
     }
@@ -64,6 +67,7 @@ public class PlayerResources
         Wood = wood;
     }
 
+    //actual cost utilization of resources
     public boolean useResourcesForBuilding(BuildingType bt) {
         if (bt == BuildingType.GlassFurnace) {
             if (this.Iron <= 0 || this.People <= 0)
