@@ -430,35 +430,11 @@ public class Main extends AbstractGame {
         int minW = Math.max(350, btnW + padX * 2);
         int maxW = Math.max(minW, Math.min(520, windowWidth - 40));
 
-       
         java.util.List<String> lines = new java.util.ArrayList<>();
-        if (!title.isEmpty()) {
-            String[] words = title.split(" ");
-            StringBuilder current = new StringBuilder();
-            for (String w : words) {
-                String trial = current.length() == 0 ? w : current + " " + w;
-                int trialW = fm.stringWidth(trial);
-                if (trialW + padX * 2 <= maxW) {
-                    current.setLength(0);
-                    current.append(trial);
-                } else {
-                    if (current.length() > 0) {
-                        lines.add(current.toString());
-                        current.setLength(0);
-                        current.append(w);
-                    } else {
-                        lines.add(w);
-                        current.setLength(0);
-                    }
-                }
-            }
-            if (current.length() > 0) lines.add(current.toString());
-        } else {
-            lines.add("");
-        }
 
         int longest = 0;
         for (String ln : lines) longest = Math.max(longest, fm.stringWidth(ln));
+        longest = Math.max(longest, fm.stringWidth(title) + fm.stringWidth(Integer.toString(meta.getRedPoints())) + fm.stringWidth(Integer.toString(meta.getBluePoints())) + 50);
         int panelW = Math.max(minW, Math.min(maxW, longest + padX * 2));
 
         int spacing = (btn != null) ? 12 : 0;
@@ -483,6 +459,9 @@ public class Main extends AbstractGame {
 
         int textX = panelX + padX;
         int textY = panelY + padY + textAscent;
+        Draw.Text(gfx, Integer.toString(meta.getBluePoints()), textX, textY, smallTitleFont, Helper.BLUE, 1f);
+        Draw.Text(gfx, title, textX + fm.stringWidth(Integer.toString(meta.getBluePoints())) + 20, textY, smallTitleFont, Helper.WHITE, 1f);
+        Draw.Text(gfx, Integer.toString(meta.getRedPoints()), textX + 40 + fm.stringWidth(Integer.toString(meta.getBluePoints())) + fm.stringWidth(title), textY, smallTitleFont, Helper.RED, 1f);
         for (int i = 0; i < lines.size(); i++) {
             String ln = lines.get(i);
             Draw.Text(gfx, ln, textX, textY + (i * lineH), smallTitleFont, Helper.WHITE, 1f);
