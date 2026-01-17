@@ -145,8 +145,17 @@ public class GameTile {
     }
 
     //build the building
-    public void buildBuilding() {
+    public void buildBuilding(boolean isBluePlayerTurn) {
         this.isBuildingExists = true;
+        if (isBluePlayerTurn) {
+            this.bluePoints += 15;
+            this.redPoints = 100 - this.bluePoints;
+        } else {
+            this.redPoints += 15;
+            this.bluePoints = 100 - this.redPoints;
+        }
     }
+
+
 
 }

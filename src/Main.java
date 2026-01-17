@@ -12,7 +12,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Arc2D;
 
 import com.engine.core.*;
 import com.engine.core.gfx.*;
@@ -507,7 +506,7 @@ public class Main extends AbstractGame {
 
                 if (!isBuildingAlreadyBuilt) {
                     if (isEnoughResourcesToBuild) {
-                        meta.buildBuilding();
+                        meta.buildBuilding(player1turn);
                         isBuildingJustBuilt = true;
                         isEnoughResourcesToBuild = activePlayerResources.useResourcesForBuilding(bt);
                     }
