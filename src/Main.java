@@ -54,7 +54,8 @@ public class Main extends AbstractGame {
     int[] xlevel = new int[]{480, 505, 630, 755, 880, 1005, 1130, 1255};
 
     //Turn timer
-    float fourtyFiveSec = 45000;
+    static final float turnTimer = 15 * 1000;
+    float fourtyFiveSec = turnTimer;
     //button cooldown
     float buttonPress = 0;
 
@@ -615,7 +616,7 @@ public class Main extends AbstractGame {
     //switch player turns
     private void changeTurns() {
         if (fourtyFiveSec <= 0) {
-            fourtyFiveSec = 45000;
+            fourtyFiveSec = turnTimer;
             selectedTileIndex = -1;
             updatePlayerResources();
             if (player1turn) {
@@ -667,7 +668,7 @@ public class Main extends AbstractGame {
         Vector2F mousePos = Input.GetMousePos();
         switch (gameState) {
             case MENU:
-                fourtyFiveSec = 15000;
+                fourtyFiveSec = turnTimer;
                 //begin game
                 if (Helper.Intersects(playButton.destRec, mousePos)) {
                     if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT)) {

@@ -153,27 +153,27 @@ public class PlayerResources
         String tileResources = resource.substring(0, resource.indexOf(", "));
         int amount = Integer.parseInt(resource.substring(resource.indexOf(", ") + 2));
 
-        if (tileResources == "People")
+        if (tileResources.equals("People"))
         {
             this.People += amount;
         }
-        else if (tileResources == "Food")
+        else if (tileResources.equals("Food"))
         {
             this.Food += amount;
         }
-        else if (tileResources == "Wood")
+        else if (tileResources.equals("Wood"))
         {
             this.Wood += amount;
         }
-        else if (tileResources == "Glass")
+        else if (tileResources.equals("Glass"))
         {
             this.Glass += amount;
         }
-        else if (tileResources == "Iron")
+        else if (tileResources.equals("Iron"))
         {
             this.Iron += amount;
         }
-        else if (tileResources == "Oil")
+        else if (tileResources.equals("Oil"))
         {
             this.Oil += amount;
         }
