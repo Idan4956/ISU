@@ -52,8 +52,6 @@ public class Main extends AbstractGame {
     //levels to help but tile locations on grid
     int[] ylevel = new int[]{200, 290, 290, 335, 380};
     int[] xlevel = new int[]{480, 505, 630, 755, 880, 1005, 1130, 1255};
-    //what % of control the player has
-    int[] tileControled = new int[]{50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
 
     //Turn timer
     float fourtyFiveSec = 45000;
@@ -666,9 +664,7 @@ public class Main extends AbstractGame {
 
     @Override
     public void Update(GameContainer gc, float deltaTime) {
-        SpriteSheet activeTile = null;
         Vector2F mousePos = Input.GetMousePos();
-        int points = 0;
         switch (gameState) {
             case MENU:
                 fourtyFiveSec = 15000;
@@ -676,8 +672,6 @@ public class Main extends AbstractGame {
                 if (Helper.Intersects(playButton.destRec, mousePos)) {
                     if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT)) {
                         gameState = GAMEPLAY;
-                        tileControled[1] += 1;
-                        tileControled[28] -= 1;
                     }
 
                 }
