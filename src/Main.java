@@ -630,6 +630,23 @@ public class Main extends AbstractGame {
         }
     }
 
+    //calculate player points based on tile control
+    private void updatePlayerPoints() {
+        int player1Count = 0;
+        int player2Count = 0;
+
+        for (GameTile tile : gameTiles) {
+            if (tile.getBluePoints() > 50) {
+                player1Count++;
+            } else if (tile.getRedPoints() > 50) {
+                player2Count++;
+            }
+        }
+
+        player1Points = Integer.toString(player1Count);
+        player2Points = Integer.toString(player2Count);
+    }
+
     @Override
     public void Update(GameContainer gc, float deltaTime) {
         SpriteSheet activeTile = null;
@@ -674,6 +691,7 @@ public class Main extends AbstractGame {
                 //collision detection, update HUD elements, etc.)
                 fourtyFiveSec -= deltaTime;
                 changeTurns();
+                updatePlayerPoints();
                 //go to settings
                 if (Input.IsKeyPressed(KeyEvent.VK_ESCAPE)) {
                     gameState = SETTINGS;
@@ -717,18 +735,14 @@ public class Main extends AbstractGame {
 
                 }
                 //victory
-                if(player1Points == "20")
-                {
+                if (player1Points.equals("20")) {
                     gameState = ENDGAME;
                 }
-                if(player2Points == "20")
-                {
+                if (player2Points.equals("20")) {
                     gameState = ENDGAME;
                 }
-                
-                player1Points = Integer.toString(points);
 
-                
+
                 break;
             case PAUSE:
                 //Get user input to unpause the game
