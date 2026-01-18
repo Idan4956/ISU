@@ -495,6 +495,7 @@ public class Main extends AbstractGame {
                 propagandaButton.destRec.x = propbtnX;
                 propagandaButton.destRec.y = propbtnY;
                 Draw.Sprite(gfx, propagandaButton);
+            }
 
             //check if a building is already on tile where button is clicked
             boolean isBuildingAlreadyBuilt = meta.isBuildingBuilt();
@@ -511,14 +512,7 @@ public class Main extends AbstractGame {
                     }
                 }
             }
-                if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(propagandaButton.destRec, Input.GetMousePos())) {
-                    propButtonPress = 1000;
 
-                        if (isEnoughResourcesToBuild) {
-                            //add function to use 1 people for creation of propaganda and check if just built to fix bug, check if player has enough resources using another function
-                        }
-                    }
-                }
             //button ui
             if (buttonPress > 0f) {
                 buttonPress -= 16.666666666666f;
@@ -541,6 +535,13 @@ public class Main extends AbstractGame {
             } else if (buttonPress < 30f) {
                 isBuildingJustBuilt = false;
             }
+        }
+        if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(propagandaButton.destRec, Input.GetMousePos())) {
+            propButtonPress = 1000;
+
+//            if (isEnoughResourcesToBuild) {
+//                //add function to use 1 people for creation of propaganda and check if just built to fix bug, check if player has enough resources using another function
+//            }
         }
     }
 
