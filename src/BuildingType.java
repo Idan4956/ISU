@@ -5,5 +5,6 @@ public enum BuildingType {
     OilDrill,
     LumberMill,
     Farm,
-    GlassFurnace
+    GlassFurnace,
+    Propaganda
 }

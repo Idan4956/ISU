@@ -179,6 +179,13 @@ public class GameTile {
         }
     }
 
-
-
+    public void invokePropaganda(boolean isBluePlayerTurn) {
+        if (isBluePlayerTurn) {
+            this.bluePoints += 5;
+            this.redPoints = 100 - this.bluePoints;
+        } else {
+            this.redPoints += 5;
+            this.bluePoints = 100 - this.redPoints;
+        }
+    }
 }

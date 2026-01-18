@@ -122,6 +122,7 @@ public class Main extends AbstractGame {
     SpriteSheet oilFieldButton;
     SpriteSheet pressedOilField;
     SpriteSheet propagandaButton;
+    SpriteSheet pressedPropaganda;
 
     //Game title/logo
     SpriteSheet gameTitle;
@@ -175,6 +176,8 @@ public class Main extends AbstractGame {
 
         propagandaButton = new SpriteSheet(LoadImage.FromFile(("images/sprites/PropagandaButton.png")));
         propagandaButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
+        pressedPropaganda = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedPropaganda.png"));
+        pressedPropaganda.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         lumberMillButton = new SpriteSheet(LoadImage.FromFile("images/sprites/lumberMillButton.png"));
         lumberMillButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         pressedLumber = new SpriteSheet(LoadImage.FromFile("images/sprites/pressedLumber.png"));
@@ -345,6 +348,10 @@ public class Main extends AbstractGame {
         }
     }
 
+    private boolean isPlayerHaveResourcesToInvokePropaganda(PlayerResources playerResources) {
+        return (playerResources.getPeople() >= 1);
+    }
+
     //UI to show user item costs
     private String BuildingCostUI(BuildingType bt) {
         if (bt == BuildingType.GlassFurnace) {
@@ -406,6 +413,8 @@ public class Main extends AbstractGame {
                 return pressed ? pressedGlassFurnace : GlassFurnaceButton;
             case OilDrill:
                 return pressed ? pressedOilField : oilFieldButton;
+            case Propaganda:
+                return pressed ? pressedPropaganda : propagandaButton;
             default:
                 return null;
         }
@@ -446,8 +455,6 @@ public class Main extends AbstractGame {
 
         int minPropW = Math.max(350, propagandaButtonW + padX * 2);
         int maxPropW = Math.max(minPropW, Math.max(520, windowWidth - 40));
-
-
 
         java.util.List<String> lines = new java.util.ArrayList<>();
 
@@ -539,14 +546,38 @@ public class Main extends AbstractGame {
             propagandaButton.destRec.x = propbtnX;
             propagandaButton.destRec.y = propbtnY;
             Draw.Sprite(gfx, propagandaButton);
-        }
 
-        if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(propagandaButton.destRec, Input.GetMousePos())) {
-            propButtonPress = 1000;
+            PlayerResources activePlayerResources = player1turn ? player1Resources : player2Resources;
+            boolean isEnoughResourcesToInvokePropaganda = isPlayerHaveResourcesToInvokePropaganda(activePlayerResources);
+            boolean isPropagandaJustInvoked = false;
+            if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(btn.destRec, Input.GetMousePos())) {
+                buttonPress = 1000;
 
-//            if (isEnoughResourcesToBuild) {
-//                //add function to use 1 people for creation of propaganda and check if just built to fix bug, check if player has enough resources using another function
-//            }
+                if (isEnoughResourcesToInvokePropaganda) {
+                    meta.invokePropaganda(player1turn);
+                    isPropagandaJustInvoked = true;
+                    isEnoughResourcesToInvokePropaganda = activePlayerResources.useResourcesForBuilding(BuildingType.Propaganda);
+                }
+            }
+
+            //button ui
+            if (buttonPress > 0f) {
+                buttonPress -= 16.666666666666f;
+                if (isTileInfoPanelSelected) {
+                    SpriteSheet pressedBtn = getBuildButton(bt, true);
+                    if (pressedBtn != null && pressedBtn.destRec != null) {
+                        pressedBtn.destRec.x = btn.destRec.x;
+                        pressedBtn.destRec.y = btn.destRec.y;
+                        Draw.Sprite(gfx, pressedBtn);
+                    }
+                    if (!isEnoughResourcesToInvokePropaganda) {
+                        Draw.FillRect(gfx, windowWidth / 2 - 450, windowHeight / 2 - 50, 900, 100, Helper.BLACK, 1F);
+                        Draw.Text(gfx, "Not enough people for propaganda " + bt.toString(), windowWidth / 2 - 430, windowHeight / 2, titleFont, Helper.WHITE, 1f);
+                    }
+                }
+            } else if (buttonPress < 30f) {
+                isBuildingJustBuilt = false;
+            }
         }
     }
 
