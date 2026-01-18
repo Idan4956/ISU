@@ -154,6 +154,7 @@ public class Main extends AbstractGame {
     public static void main(String[] args) {
         GameContainer gameContainer = new GameContainer(new Main(), gameName, windowWidth, windowHeight, fps);
         gameContainer.Start();
+
     }
 
 
@@ -168,32 +169,36 @@ public class Main extends AbstractGame {
         oceanBg.destRec = new Rectangle(0, 0, windowWidth, windowHeight);
         oceanBg.StartAnimation();
         //Buttons
+        int buttonWidth = 140;
+        int buttonHeight = 56;
+
+
         propagandaButton = new SpriteSheet(LoadImage.FromFile(("images/sprites/PropagandaButton.png")));
-        propagandaButton.destRec = new Rectangle(0, 0, (int) (propagandaButton.GetFrameWidth() * 0.2f), (int) (propagandaButton.GetFrameHeight()));
+        propagandaButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         lumberMillButton = new SpriteSheet(LoadImage.FromFile("images/sprites/lumberMillButton.png"));
-        lumberMillButton.destRec = new Rectangle(0, 0, (int) (lumberMillButton.GetFrameWidth() * 0.2f), (int) (lumberMillButton.GetFrameHeight() * 0.2f));
+        lumberMillButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         pressedLumber = new SpriteSheet(LoadImage.FromFile("images/sprites/pressedLumber.png"));
-        pressedLumber.destRec = new Rectangle(0, 0, (int) (pressedLumber.GetFrameWidth() * 0.08f), (int) (pressedLumber.GetFrameHeight() * 0.08f));
+        pressedLumber.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         mineButton = new SpriteSheet(LoadImage.FromFile("images/sprites/MineButton.png"));
-        mineButton.destRec = new Rectangle(0, 0, (int) (mineButton.GetFrameWidth() * 0.2f), (int) (mineButton.GetFrameHeight() * 0.2f));
+        mineButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         pressedMine = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedMine.png"));
-        pressedMine.destRec = new Rectangle(0, 0, (int) (pressedMine.GetFrameWidth() * 0.2f), (int) (pressedMine.GetFrameHeight() * 0.2f));
+        pressedMine.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         farmButton = new SpriteSheet(LoadImage.FromFile("images/sprites/FarmButton.png"));
-        farmButton.destRec = new Rectangle(0, 0, (int) (farmButton.GetFrameWidth() * 0.2f), (int) (farmButton.GetFrameHeight() * 0.2f));
+        farmButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         pressedfarm = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedFarm.png"));
-        pressedfarm.destRec = new Rectangle(0, 0, (int) (pressedfarm.GetFrameWidth() * 0.2f), (int) (pressedfarm.GetFrameHeight() * 0.2f));
+        pressedfarm.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         pressedHouse = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedVillage.png"));
-        pressedHouse.destRec = new Rectangle(0, 0, (int) (pressedHouse.GetFrameWidth() * 0.2f), (int) (pressedHouse.GetFrameHeight() * 0.2f));
+        pressedHouse.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         GlassFurnaceButton = new SpriteSheet(LoadImage.FromFile("images/sprites/GlassFurnaceButton.png"));
-        GlassFurnaceButton.destRec = new Rectangle(0, 0, (int) (GlassFurnaceButton.GetFrameWidth() * 0.2f), (int) (GlassFurnaceButton.GetFrameHeight() * 0.2f));
+        GlassFurnaceButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         pressedGlassFurnace = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedGlassFurnace.png"));
-        pressedGlassFurnace.destRec = new Rectangle(0, 0, (int) (pressedGlassFurnace.GetFrameWidth() * 0.2f), (int) (pressedGlassFurnace.GetFrameHeight() * 0.2f));
+        pressedGlassFurnace.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         oilFieldButton = new SpriteSheet(LoadImage.FromFile("images/sprites/OilFieldButton.png"));
-        oilFieldButton.destRec = new Rectangle(0, 0, (int) (oilFieldButton.GetFrameWidth() * 0.2f), (int) (oilFieldButton.GetFrameHeight() * 0.2f));
+        oilFieldButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         pressedOilField = new SpriteSheet(LoadImage.FromFile("images/sprites/PressedOilField.png"));
-        pressedOilField.destRec = new Rectangle(0, 0, (int) (pressedOilField.GetFrameWidth() * 0.2f), (int) (pressedOilField.GetFrameHeight() * 0.2f));
+        pressedOilField.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         HouseButton = new SpriteSheet(LoadImage.FromFile("images/sprites/VillageButton.png"));
-        HouseButton.destRec = new Rectangle(0, 0, (int) (HouseButton.GetFrameWidth() * 0.2f), (int) (HouseButton.GetFrameHeight() * 0.2f));
+        HouseButton.destRec = new Rectangle(0, 0, buttonWidth, buttonHeight);
         //Tiles
         village = new SpriteSheet(LoadImage.FromFile("images/sprites/village.png"));
         village.destRec = new Rectangle(xlevel[4], ylevel[0], village.GetFrameWidth() * 2, village.GetFrameHeight() * 2);
@@ -489,14 +494,6 @@ public class Main extends AbstractGame {
             btn.destRec.y = btnY;
             Draw.Sprite(gfx, btn);
 
-            if (propagandaButton != null) {
-                int propbtnX = panelX + padX;
-                int propbtnY = panelY + padY + titleBlockH + spacing;
-                propagandaButton.destRec.x = propbtnX;
-                propagandaButton.destRec.y = propbtnY;
-                Draw.Sprite(gfx, propagandaButton);
-            }
-
             //check if a building is already on tile where button is clicked
             boolean isBuildingAlreadyBuilt = meta.isBuildingBuilt();
             PlayerResources activePlayerResources = player1turn ? player1Resources : player2Resources;
@@ -536,6 +533,14 @@ public class Main extends AbstractGame {
                 isBuildingJustBuilt = false;
             }
         }
+        if (propagandaButton != null) {
+            int propbtnX = panelX + padX + btn.destRec.width + padX;
+            int propbtnY = panelY + padY + titleBlockH + spacing;
+            propagandaButton.destRec.x = propbtnX;
+            propagandaButton.destRec.y = propbtnY;
+            Draw.Sprite(gfx, propagandaButton);
+        }
+
         if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(propagandaButton.destRec, Input.GetMousePos())) {
             propButtonPress = 1000;
 
@@ -566,6 +571,8 @@ public class Main extends AbstractGame {
     private void buildTileList() {
         tiles.clear();
         gameTiles.clear();
+        System.out.print("btn width:" + lumberMillButton.GetFrameWidth() * 0.2f);
+        System.out.print("btn hights:" + lumberMillButton.GetFrameHeight() * 0.2f);
 
         // Deserts
         addTileWithMeta(desert, "Sahara Desert", TileType.Desert, 50, 50);
