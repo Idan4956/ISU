@@ -58,6 +58,7 @@ public class Main extends AbstractGame {
     float fourtyFiveSec = turnTimer;
     //button cooldown
     float buttonPress = 0;
+    float propButtonPress = 0;
 
     //player points
     String player1Points = "0";
@@ -120,6 +121,7 @@ public class Main extends AbstractGame {
     SpriteSheet pressedGlassFurnace;
     SpriteSheet oilFieldButton;
     SpriteSheet pressedOilField;
+    SpriteSheet propagandaButton;
 
     //Game title/logo
     SpriteSheet gameTitle;
@@ -166,6 +168,8 @@ public class Main extends AbstractGame {
         oceanBg.destRec = new Rectangle(0, 0, windowWidth, windowHeight);
         oceanBg.StartAnimation();
         //Buttons
+        propagandaButton = new SpriteSheet(LoadImage.FromFile(("images/sprites/PropagandaButton.png")));
+        propagandaButton.destRec = new Rectangle(0, 0, (int) (propagandaButton.GetFrameWidth() * 0.2f), (int) (propagandaButton.GetFrameHeight()));
         lumberMillButton = new SpriteSheet(LoadImage.FromFile("images/sprites/lumberMillButton.png"));
         lumberMillButton.destRec = new Rectangle(0, 0, (int) (lumberMillButton.GetFrameWidth() * 0.2f), (int) (lumberMillButton.GetFrameHeight() * 0.2f));
         pressedLumber = new SpriteSheet(LoadImage.FromFile("images/sprites/pressedLumber.png"));
@@ -416,7 +420,7 @@ public class Main extends AbstractGame {
         int lineH = fm.getHeight();
         int textAscent = fm.getAscent();
 
-        int btnW = 0, btnH = 0;
+        int btnW = 0, btnH = 0; int propagandaButtonW = 0; int propagandaButtonH = 0;
         BuildingType bt = (meta != null) ? meta.getAvailableBuilding() : null;
 
         SpriteSheet btn = getBuildButton(bt, false);
@@ -424,11 +428,21 @@ public class Main extends AbstractGame {
             btnW = Math.max(0, btn.destRec.width);
             btnH = Math.max(0, btn.destRec.height);
         }
+        if (propagandaButton != null && propagandaButton.destRec != null)
+        {
+            propagandaButtonW = Math.max(0, propagandaButton.destRec.width);
+            propagandaButtonH = Math.max(0, propagandaButton.destRec.height);
+        }
 
-        int padX = 16;
-        int padY = 12;
+        int padX = 20;
+        int padY = 15;
         int minW = Math.max(350, btnW + padX * 2);
         int maxW = Math.max(minW, Math.min(520, windowWidth - 40));
+
+        int minPropW = Math.max(350, propagandaButtonW + padX * 2);
+        int maxPropW = Math.max(minPropW, Math.max(520, windowWidth - 40));
+
+
 
         java.util.List<String> lines = new java.util.ArrayList<>();
 
@@ -437,10 +451,10 @@ public class Main extends AbstractGame {
         longest = Math.max(longest, fm.stringWidth(title) + fm.stringWidth(Integer.toString(meta.getRedPoints())) + fm.stringWidth(Integer.toString(meta.getBluePoints())) + 50);
         int panelW = Math.max(minW, Math.min(maxW, longest + padX * 2));
 
-        int spacing = (btn != null) ? 12 : 0;
+        int spacing = (btn != null) ? 40 : 0;
         int titleBlockH = lines.size() * lineH;
         int contentH = titleBlockH + spacing + ((btn != null) ? btnH : 0);
-        int panelH = Math.max(250, contentH + padY * 2);
+        int panelH = Math.max(270, contentH + padY * 2);
 
         int baseX = tile.destRec.x + tile.destRec.width + 20;
 
@@ -475,6 +489,13 @@ public class Main extends AbstractGame {
             btn.destRec.y = btnY;
             Draw.Sprite(gfx, btn);
 
+            if (propagandaButton != null) {
+                int propbtnX = panelX + padX;
+                int propbtnY = panelY + padY + titleBlockH + spacing;
+                propagandaButton.destRec.x = propbtnX;
+                propagandaButton.destRec.y = propbtnY;
+                Draw.Sprite(gfx, propagandaButton);
+
             //check if a building is already on tile where button is clicked
             boolean isBuildingAlreadyBuilt = meta.isBuildingBuilt();
             PlayerResources activePlayerResources = player1turn ? player1Resources : player2Resources;
@@ -490,6 +511,14 @@ public class Main extends AbstractGame {
                     }
                 }
             }
+                if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(propagandaButton.destRec, Input.GetMousePos())) {
+                    propButtonPress = 1000;
+
+                        if (isEnoughResourcesToBuild) {
+                            //add function to use 1 people for creation of propaganda and check if just built to fix bug, check if player has enough resources using another function
+                        }
+                    }
+                }
             //button ui
             if (buttonPress > 0f) {
                 buttonPress -= 16.666666666666f;
