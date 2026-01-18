@@ -540,7 +540,7 @@ public class Main extends AbstractGame {
                 isBuildingJustBuilt = false;
             }
         }
-        if (propagandaButton != null) {
+        if (propagandaButton != null && isTileInfoPanelSelected) {
             int propbtnX = panelX + padX + btn.destRec.width + padX;
             int propbtnY = panelY + padY + titleBlockH + spacing;
             propagandaButton.destRec.x = propbtnX;
@@ -550,7 +550,7 @@ public class Main extends AbstractGame {
             PlayerResources activePlayerResources = player1turn ? player1Resources : player2Resources;
             boolean isEnoughResourcesToInvokePropaganda = isPlayerHaveResourcesToInvokePropaganda(activePlayerResources);
             boolean isPropagandaJustInvoked = false;
-            if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(btn.destRec, Input.GetMousePos())) {
+            if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(propagandaButton.destRec, Input.GetMousePos())) {
                 buttonPress = 1000;
 
                 if (isEnoughResourcesToInvokePropaganda) {
@@ -564,7 +564,7 @@ public class Main extends AbstractGame {
             if (buttonPress > 0f) {
                 buttonPress -= 16.666666666666f;
                 if (isTileInfoPanelSelected) {
-                    SpriteSheet pressedBtn = getBuildButton(bt, true);
+                    SpriteSheet pressedBtn = getBuildButton(BuildingType.Propaganda, true);
                     if (pressedBtn != null && pressedBtn.destRec != null) {
                         pressedBtn.destRec.x = btn.destRec.x;
                         pressedBtn.destRec.y = btn.destRec.y;
