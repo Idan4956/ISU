@@ -54,7 +54,7 @@ public class Main extends AbstractGame {
     int[] xlevel = new int[]{480, 505, 630, 755, 880, 1005, 1130, 1255};
 
     //Turn timer
-    static final float turnTimer = 15 * 1000;
+    static final float turnTimer = 45 * 1000;
     float fourtyFiveSec = turnTimer;
     //button cooldown
     float buttonPress = 0;
@@ -131,6 +131,7 @@ public class Main extends AbstractGame {
     SpriteSheet resumeButton;
     SpriteSheet quitButton;
     SpriteSheet playButton;
+    SpriteSheet continueButton;
 
     //player resources
     PlayerResources player1Resources = new PlayerResources();
@@ -279,6 +280,8 @@ public class Main extends AbstractGame {
         resumeButton.destRec = new Rectangle(windowWidth/2 - resumeButton.GetFrameWidth()/2, windowHeight/2 -350, resumeButton.GetFrameWidth(), resumeButton.GetFrameHeight());
         quitButton = new SpriteSheet(LoadImage.FromFile("images/sprites/QuitButton.png"));
         quitButton.destRec = new Rectangle(windowWidth/2 - quitButton.GetFrameWidth()/2, windowHeight/2, quitButton.GetFrameWidth(), quitButton.GetFrameHeight());
+        continueButton = new SpriteSheet(LoadImage.FromFile("images/sprites/ContinueButton.png"));
+        continueButton.destRec = new Rectangle(windowWidth/2 - continueButton.GetFrameWidth()/2, windowHeight - 400, continueButton.GetFrameWidth(), continueButton.GetFrameHeight());
 
 
         buildTileList();
@@ -713,7 +716,7 @@ public class Main extends AbstractGame {
                 //begin game
                 if (Helper.Intersects(playButton.destRec, mousePos)) {
                     if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT)) {
-                        gameState = GAMEPLAY;
+                        gameState = INSTRUCTIONS;
                     }
 
                 }
@@ -737,7 +740,13 @@ public class Main extends AbstractGame {
                 }
                 break;
             case INSTRUCTIONS:
-
+                if (Helper.Intersects(continueButton.destRec, Input.GetMousePos()))
+                {
+                    if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT))
+                    {
+                        gameState = GAMEPLAY;
+                    }
+                }
                 break;
             case GAMEPLAY:
                 //Implement standard game logic (input, update game objects, apply physics,
@@ -869,6 +878,17 @@ public class Main extends AbstractGame {
                 break;
             case INSTRUCTIONS:
                 //Get user input to return to MENU
+                Draw.Text(gfx, "Instructions", windowWidth/2 - 570, 200, victoryFont, Helper.WHITE, 1F);
+                Draw.Text(gfx, "To win the game you must have 20 points", windowWidth/2 - 900, 250, titleFont, Helper.WHITE, 1F);
+                Draw.Text(gfx, "Each point is achieved by having the majority support in a region", windowWidth/2 - 900, 300, titleFont, Helper.WHITE, 1F);
+                Draw.Text(gfx, "When you build on a tile it pulls 15% support from your opposition and grants it to you.", windowWidth/2 - 900, 350, titleFont, Helper.WHITE, 1F );
+                Draw.Text(gfx, "A building on a tile it will grant 1 resource on that tile on each of your turns", windowWidth/2 - 900, 400, titleFont, Helper.WHITE, 1F );
+                Draw.Text(gfx, " If you have the upkeep materials", windowWidth/2 - 900, 450, titleFont, Helper.WHITE, 1F);
+                Draw.Text(gfx, "Good Luck and Enjoy", windowWidth/2 - 900, 500, titleFont, Helper.WHITE, 1F );
+
+
+
+                Draw.Sprite(gfx, continueButton);
                 break;
             case GAMEPLAY:
                 //Implement standard game logic (input, update game objects, apply physics,
