@@ -53,12 +53,15 @@ public class Main extends AbstractGame {
     int[] ylevel = new int[]{200, 290, 290, 335, 380};
     int[] xlevel = new int[]{480, 505, 630, 755, 880, 1005, 1130, 1255};
 
+    // info panel dimentions
+    int panelX, panelY, panelW, panelH;
+
     //Turn timer
     static final float turnTimer = 45 * 1000;
     float fourtyFiveSec = turnTimer;
     //button cooldown
     float buttonPress = 0;
-    float propButtonPress = 0;
+    float propagandaButtonPress = 0;
 
     //player points
     String player1Points = "0";
@@ -464,19 +467,19 @@ public class Main extends AbstractGame {
         int longest = 0;
         for (String ln : lines) longest = Math.max(longest, fm.stringWidth(ln));
         longest = Math.max(longest, fm.stringWidth(title) + fm.stringWidth(Integer.toString(meta.getRedPoints())) + fm.stringWidth(Integer.toString(meta.getBluePoints())) + 50);
-        int panelW = Math.max(minW, Math.min(maxW, longest + padX * 2));
+        panelW = Math.max(minW, Math.min(maxW, longest + padX * 2));
 
         int spacing = (btn != null) ? 40 : 0;
         int titleBlockH = lines.size() * lineH;
         int contentH = titleBlockH + spacing + ((btn != null) ? btnH : 0);
-        int panelH = Math.max(270, contentH + padY * 2);
+        panelH = Math.max(270, contentH + padY * 2);
 
         int baseX = tile.destRec.x + tile.destRec.width + 20;
 
         int baseY = tile.destRec.y + 20;
 
-        int panelX = Math.max(10, Math.min(baseX, windowWidth - panelW - 10));
-        int panelY = Math.max(10, Math.min(baseY, windowHeight - panelH - 10));
+        panelX = Math.max(10, Math.min(baseX, windowWidth - panelW - 10));
+        panelY = Math.max(10, Math.min(baseY, windowHeight - panelH - 10));
 
         //draw background rectangle
         Draw.FillRect(gfx, panelX, panelY, panelW, panelH, Helper.BLACK, 0.6f);
@@ -552,34 +555,29 @@ public class Main extends AbstractGame {
 
             PlayerResources activePlayerResources = player1turn ? player1Resources : player2Resources;
             boolean isEnoughResourcesToInvokePropaganda = isPlayerHaveResourcesToInvokePropaganda(activePlayerResources);
-            boolean isPropagandaJustInvoked = false;
             if (Input.IsMouseButtonReleased(Input.MOUSE_LEFT) && Helper.Intersects(propagandaButton.destRec, Input.GetMousePos())) {
-                buttonPress = 1000;
+                propagandaButtonPress = 1000;
 
                 if (isEnoughResourcesToInvokePropaganda) {
                     meta.invokePropaganda(player1turn);
-                    isPropagandaJustInvoked = true;
-                    isEnoughResourcesToInvokePropaganda = activePlayerResources.useResourcesForBuilding(BuildingType.Propaganda);
                 }
             }
 
             //button ui
-            if (buttonPress > 0f) {
-                buttonPress -= 16.666666666666f;
+            if (propagandaButtonPress > 0f) {
+                propagandaButtonPress -= 16.666666666666f;
                 if (isTileInfoPanelSelected) {
                     SpriteSheet pressedBtn = getBuildButton(BuildingType.Propaganda, true);
                     if (pressedBtn != null && pressedBtn.destRec != null) {
-                        pressedBtn.destRec.x = btn.destRec.x;
-                        pressedBtn.destRec.y = btn.destRec.y;
+                        pressedBtn.destRec.x = propagandaButton.destRec.x;
+                        pressedBtn.destRec.y = propagandaButton.destRec.y;
                         Draw.Sprite(gfx, pressedBtn);
                     }
-                    if (!isEnoughResourcesToInvokePropaganda) {
+                    if (!isPlayerHaveResourcesToInvokePropaganda(activePlayerResources)) {
                         Draw.FillRect(gfx, windowWidth / 2 - 450, windowHeight / 2 - 50, 900, 100, Helper.BLACK, 1F);
-                        Draw.Text(gfx, "Not enough people for propaganda " + bt.toString(), windowWidth / 2 - 430, windowHeight / 2, titleFont, Helper.WHITE, 1f);
+                        Draw.Text(gfx, "Not enough people for propaganda", windowWidth / 2 - 430, windowHeight / 2, titleFont, Helper.WHITE, 1f);
                     }
                 }
-            } else if (buttonPress < 30f) {
-                isBuildingJustBuilt = false;
             }
         }
     }
@@ -765,7 +763,7 @@ public class Main extends AbstractGame {
                     //get tile
                     SpriteSheet st = getSelectedTile();
                     if (st != null && st.destRec != null) {
-                        Rectangle panelRect = new Rectangle(st.destRec.x + 200, st.destRec.y + 100, 220, 350);
+                        Rectangle panelRect = new Rectangle(panelX, panelY, panelW, panelH);
                         //tile logic
 
                         GameTile selectedMeta = getSelectedGameTile();
@@ -777,7 +775,7 @@ public class Main extends AbstractGame {
                         }
                         //is player using panel
                         Vector2F mouse = Input.GetMousePos();
-                        if (Helper.Intersects(panelRect, mouse) || (btn != null && Helper.Intersects(btn.destRec, mouse))) {
+                        if (Helper.Intersects(panelRect, mouse) || (btn != null && Helper.Intersects(btn.destRec, mouse)) || (propagandaButton != null && Helper.Intersects(propagandaButton.destRec, mouse))) {
                             clickedUI = true;
                         }
                     }
