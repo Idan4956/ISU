@@ -57,7 +57,7 @@ public class Main extends AbstractGame {
     int panelX, panelY, panelW, panelH;
 
     //Turn timer
-    static final float turnTimer = 45 * 1000;
+    static final float turnTimer = 10 * 1000;
     float fourtyFiveSec = turnTimer;
     //button cooldown
     float buttonPress = 0;
@@ -521,7 +521,7 @@ public class Main extends AbstractGame {
 
                 if (!isBuildingAlreadyBuilt) {
                     if (isEnoughResourcesToBuild) {
-                        meta.buildBuilding(player1turn);
+                        meta.buildBuilding(player1turn, turnNumber);
                         isBuildingJustBuilt = true;
                         isEnoughResourcesToBuild = activePlayerResources.useResourcesForBuilding(bt);
                     }
@@ -705,8 +705,14 @@ public class Main extends AbstractGame {
         for (GameTile tile : gameTiles) {
             if (player1turn && tile.getBluePoints() > 50) {
                 player1Resources.assignResources(tile.getResources());
+                if (tile.isThirdTurn(turnNumber)) {
+                    player1Resources.assignResources(tile.removeResource());
+                }
             }else if (player2turn && tile.getRedPoints() > 50) {
                 player2Resources.assignResources(tile.getResources());
+                if (tile.isThirdTurn(turnNumber)) {
+                    player2Resources.assignResources(tile.removeResource());
+                }
             }
         }
     }

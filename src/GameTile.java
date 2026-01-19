@@ -25,10 +25,8 @@ public class GameTile {
     // Resources provided by this tile
     private final List<String> resources = new ArrayList<>();
 
-    // The tile location
-    private Point location;
-
     private boolean isBuildingExists;
+    private int turnBuildingBuilt;
 
     //information for tile logic
     public GameTile(SpriteSheet icon, int bluePoints, int redPoints, List<String> resources) {
@@ -124,10 +122,14 @@ public class GameTile {
             } else if (tileType == TileType.Desert) {
                 resource = "Oil";
             }
-            howMany = 1;
+            howMany = -1;
         }
 
         return resource + ", " + Integer.toString(howMany);
+    }
+
+    public boolean isThirdTurn(int turnNumber) {
+        return this.turnBuildingBuilt - turnNumber % 3 == 0;
     }
 
     //find the available buildings to be constructed by the tiletype
@@ -157,7 +159,7 @@ public class GameTile {
     }
 
     //build the building
-    public void buildBuilding(boolean isBluePlayerTurn) {
+    public void buildBuilding(boolean isBluePlayerTurn, int turnNumber) {
         this.isBuildingExists = true;
         if (isBluePlayerTurn) {
             this.bluePoints += 15;
@@ -166,6 +168,8 @@ public class GameTile {
             this.redPoints += 15;
             this.bluePoints = 100 - this.redPoints;
         }
+
+        this.turnBuildingBuilt = turnNumber;
     }
 
     public void invokePropaganda(boolean isBluePlayerTurn) {
