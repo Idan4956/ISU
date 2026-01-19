@@ -57,7 +57,7 @@ public class Main extends AbstractGame {
     int panelX, panelY, panelW, panelH;
 
     //Turn timer
-    static final float turnTimer = 10 * 1000;
+    static final float turnTimer = 45 * 1000;
     float fourtyFiveSec = turnTimer;
     //button cooldown
     float buttonPress = 0;
@@ -80,6 +80,7 @@ public class Main extends AbstractGame {
 
     //BG
     SpriteSheet oceanBg;
+    SpriteSheet menuBg;
 
     //Tiles
     SpriteSheet village;
@@ -176,6 +177,9 @@ public class Main extends AbstractGame {
         oceanBg = new SpriteSheet(LoadImage.FromFile("images/backgrounds/waterbganimation.png"),5,5, 0, 21, 5);
         oceanBg.destRec = new Rectangle(0, 0, windowWidth, windowHeight);
         oceanBg.StartAnimation();
+        
+        menuBg = new SpriteSheet(LoadImage.FromFile("images/backgrounds/menuBg.jpg"));
+        menuBg.destRec = new Rectangle(0, 0, windowWidth, windowHeight);
         //Buttons
         int buttonWidth = 140;
         int buttonHeight = 56;
@@ -841,7 +845,8 @@ public class Main extends AbstractGame {
         switch (gameState) {
             case MENU:
                 //Get and implement menu interactions
-                Draw.Sprite(gfx, oceanBg);
+                Draw.Sprite(gfx, menuBg);
+                Draw.FillRect(gfx, 0, 0, windowWidth, windowHeight, Helper.BLACK, 0.8f);
                 Draw.Sprite(gfx, playButton);
                 Draw.Sprite(gfx, gameTitle);
                 break;
@@ -888,6 +893,9 @@ public class Main extends AbstractGame {
                 break;
             case INSTRUCTIONS:
                 //Get user input to return to MENU
+                Draw.Sprite(gfx, menuBg);
+                Draw.FillRect(gfx, 0, 0, windowWidth, windowHeight, Helper.BLACK, 0.8f);
+                 
                 Draw.Text(gfx, "Instructions", windowWidth/2 - 570, 200, victoryFont, Helper.WHITE, 1F);
                 Draw.Text(gfx, "To win the game you must have 20 points", windowWidth/2 - 900, 250, titleFont, Helper.WHITE, 1F);
                 Draw.Text(gfx, "Each point is achieved by having the majority support in a region", windowWidth/2 - 900, 300, titleFont, Helper.WHITE, 1F);
