@@ -361,22 +361,22 @@ public class Main extends AbstractGame {
     //UI to show user item costs
     private String BuildingCostUI(BuildingType bt) {
         if (bt == BuildingType.GlassFurnace) {
-            return "Cost:, 1 Iron, 1 Person, 1 Oil for upkeep every 3 turns";
+            return "Building cost:, 1 Iron, 1 Person, 1 Oil for upkeep every 3 turns";
         }
         else if (bt == BuildingType.Farm) {
-            return "Cost:, 1 person";
+            return "Building cost:, 1 person";
         }
         else if (bt == BuildingType.LumberMill) {
-            return "Cost:, 1 person, 1 Iron, 1 Oil for upkeep every 3 turns";
+            return "Building cost:, 1 person, 1 Iron, 1 Oil for upkeep every 3 turns";
         }
         else if (bt == BuildingType.OilDrill) {
-            return "Cost:, 1 Iron, 1 Person, 1 Food for  upkeep every 3 turns";
+            return "Building cost:, 1 Iron, 1 Person, 1 Food for  upkeep every 3 turns";
         }
         else if (bt == BuildingType.Mine) {
-            return "Cost:, 1 Wood, 1 Person, 1 Food for upkeep every 3 turns";
+            return "Building cost:, 1 Wood, 1 Person, 1 Food for upkeep every 3 turns";
         }
         else if (bt == BuildingType.House) {
-            return "Cost:, 1 Food, 1 Iron, 1 Wood, 1 Glass";
+            return "Building cost:, 1 Food, 1 Iron, 1 Wood, 1 Glass";
         } else {
             return "No info available";
         }
@@ -484,9 +484,11 @@ public class Main extends AbstractGame {
         //draw background rectangle
         Draw.FillRect(gfx, panelX, panelY, panelW, panelH, Helper.BLACK, 0.6f);
         String[] buildingCostParts = BuildingCostUI(bt).split(", ");
-        for (int i = 0; i < buildingCostParts.length; i++) {
-            String part = buildingCostParts[i];
-            Draw.Text(gfx, part, panelX + costFont.getSize(), panelY + 150 + i * (costFont.getSize() + 5), costFont, Helper.WHITE, 1f);
+        if (isTileInfoPanelSelected) {
+            for (int i = 0; i < buildingCostParts.length; i++) {
+                String part = buildingCostParts[i];
+                Draw.Text(gfx, part, panelX + costFont.getSize(), panelY + 150 + i * (costFont.getSize() + 5), costFont, Helper.WHITE, 1f);
+            }
         }
 
         int textX = panelX + padX;
@@ -880,9 +882,11 @@ public class Main extends AbstractGame {
                 Draw.Text(gfx, "To win the game you must have 20 points", windowWidth/2 - 900, 250, titleFont, Helper.WHITE, 1F);
                 Draw.Text(gfx, "Each point is achieved by having the majority support in a region", windowWidth/2 - 900, 300, titleFont, Helper.WHITE, 1F);
                 Draw.Text(gfx, "When you build on a tile it pulls 15% support from your opposition and grants it to you.", windowWidth/2 - 900, 350, titleFont, Helper.WHITE, 1F );
-                Draw.Text(gfx, "A building on a tile it will grant 1 resource on that tile on each of your turns", windowWidth/2 - 900, 400, titleFont, Helper.WHITE, 1F );
-                Draw.Text(gfx, " If you have the upkeep materials", windowWidth/2 - 900, 450, titleFont, Helper.WHITE, 1F);
-                Draw.Text(gfx, "Good Luck and Enjoy", windowWidth/2 - 900, 500, titleFont, Helper.WHITE, 1F );
+                Draw.Text(gfx, "A building on a tile it will grant 1 resource on that tile on each of your turns,", windowWidth/2 - 900, 400, titleFont, Helper.WHITE, 1F );
+                Draw.Text(gfx, "if you have the upkeep materials", windowWidth/2 - 900, 450, titleFont, Helper.WHITE, 1F);
+                Draw.Text(gfx, "The cost to invoke propaganda is 1 person", windowWidth/2 - 900, 500, titleFont, Helper.WHITE, 1F);
+                Draw.Text(gfx, "Invoking propaganda takes 5% support from your opponent and grants it to you", windowWidth/2 - 900, 550, titleFont, Helper.WHITE, 1F);
+                Draw.Text(gfx, "Good Luck and Enjoy", windowWidth/2 - 900, 600, titleFont, Helper.WHITE, 1F );
 
 
 
