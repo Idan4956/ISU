@@ -63,6 +63,9 @@ public class Main extends AbstractGame {
     float buttonPress = 0;
     float propagandaButtonPress = 0;
 
+    // active turn number
+    int turnNumber = 1;
+
     //player points
     String player1Points = "0";
     String player2Points = "0";
@@ -674,6 +677,7 @@ public class Main extends AbstractGame {
             } else if (player2turn) {
                 player2turn = false;
                 player1turn = true;
+                turnNumber++;
             }
             updatePlayerResources();
         }
@@ -1033,11 +1037,11 @@ public class Main extends AbstractGame {
                 Draw.Text(gfx, player1Points, 225, 45, titleFont, Helper.WHITE, 1f);
                 Draw.Text(gfx, "Points: ", 1700, 45, titleFont, Helper.RED, 1f);
                 Draw.Text(gfx, player2Points, 1850, 45, titleFont, Helper.WHITE, 1f);
-                Draw.Text(gfx, "Turn: ", 900, 45, titleFont, Helper.WHITE, 1f);
+                Draw.Text(gfx, "Turn " + turnNumber + ": ", 900, 45, titleFont, Helper.WHITE, 1f);
                 if (player1turn == true) {
-                    Draw.Text(gfx, String.format("%.2f", fourtyFiveSec / 1000), 1020, 45, titleFont, Helper.BLUE, 1f);
+                    Draw.Text(gfx, String.format("%.2f", fourtyFiveSec / 1000), 1050, 45, titleFont, Helper.BLUE, 1f);
                 } else if (player2turn == true) {
-                    Draw.Text(gfx, String.format("%.2f", fourtyFiveSec / 1000), 1020, 45, titleFont, Helper.RED, 1f);
+                    Draw.Text(gfx, String.format("%.2f", fourtyFiveSec / 1000), 1050, 45, titleFont, Helper.RED, 1f);
                 }
                 //player Icons and hovering
                 Draw.Sprite(gfx, player1Icon);

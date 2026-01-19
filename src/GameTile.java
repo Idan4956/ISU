@@ -109,36 +109,25 @@ public class GameTile {
         return resource + ", " + Integer.toString(howMany);
     }
 
-    //add resource by tile
-    public void addResource(String resource) {
-        if (resource != null && !resource.isEmpty()) {
-            resources.add(resource);
+    //remove 1 resource every 3 turns for some buildings
+    public String removeResource() {
+        String resource = "";
+        int howMany = 0;
+
+        if (this.isBuildingExists) {
+            if (tileType == TileType.Mountains) {
+                resource = "Food";
+            } else if (tileType == TileType.Forest) {
+                resource = "Oil";
+            } else if (tileType == TileType.OilField) {
+                resource = "Food";
+            } else if (tileType == TileType.Desert) {
+                resource = "Oil";
+            }
+            howMany = 1;
         }
 
-    }
-
-    //remove resources for the every 3 turns
-    public boolean removeResource(String resource) {
-        return resources.remove(resource);
-    }
-
-
-
-    //getter and setter for location
-    public Point getLocation() {
-        return location == null ? null : new Point(location);
-    }
-
-    public void setLocation(Point location) {
-        this.location = (location == null) ? null : new Point(location);
-    }
-
-    public void setLocation(int x, int y) {
-        if (this.location == null) {
-            this.location = new Point(x, y);
-        } else {
-            this.location.setLocation(x, y);
-        }
+        return resource + ", " + Integer.toString(howMany);
     }
 
     //find the available buildings to be constructed by the tiletype
